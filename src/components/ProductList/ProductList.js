@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import Grid from '@material-ui/core/Grid';
 import Card from '../Card/Card';
 
-import { getProductsByCategory } from "../../redux/actions"
+import { getAllProduct } from "../../redux/actions"
 
 const styles = theme => ({
     root: {
@@ -20,7 +20,11 @@ const styles = theme => ({
   class Content extends Component {
     
     componentDidMount(){
-        this.props.getProductsByCategory('Shoes');
+      const query = {
+        page: 1,
+        sizePage: this.props.sizePage,
+      }
+        this.props.getAllProduct(query)
     }
     render(){
       const { classes, product } = this.props;
@@ -30,7 +34,7 @@ const styles = theme => ({
               product.map(item => {
                 return (
                   <Grid item className={classes.paper} key={item.id} xs={12} sm={6} md={4} lg={3} xl={3}>
-                    <Card image={item.Images[0].url} name={item.name} dscription={item.dscription}/>
+                    <Card image={item.Images[0].url} name={item.name} price={item.price} dscription={item.dscription}/>
                   </Grid>
                 )
               })
@@ -46,12 +50,14 @@ const styles = theme => ({
 
   const mapStateToProps = state => {
       return {
-          product: state.product.products
+          product: state.filter.products,
+          sizePage: state.filter.sizePage,
+          price: state.initialState.price
       }
   }
   
   const mapDispatchToProps = dispatch => {
-      return bindActionCreators({ getProductsByCategory }, dispatch)
+      return bindActionCreators({ getAllProduct }, dispatch)
   }
   
   export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Content));

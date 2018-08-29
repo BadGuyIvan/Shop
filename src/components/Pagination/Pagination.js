@@ -12,13 +12,13 @@ const styles = theme => ({
   [theme.breakpoints.up("xs")]: {
     wrapper: {
       display: 'flex',
-      justifyContent: 'center'
+      justifyContent: 'flex-end'
     }
   },
   [theme.breakpoints.up("sm")]: {
     wrapper: {
       display: 'flex',
-      justifyContent: 'center'
+      justifyContent: 'flex-end'
     }
   },
   [theme.breakpoints.up("md")]: {
@@ -100,9 +100,10 @@ const LastPageLink = ({isActive, onClick, isDisabled}) => (
 const Wrapper = (props) => {
   const { classes } = props;
   return (
-          <Grid className={classes.wrapper}>
+    // className={classes.wrapper}
+          <div>
               {props.children}
-          </Grid>
+          </div>
           )
 }
 

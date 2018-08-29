@@ -31,7 +31,7 @@ const styles = {
 };
 
 function CardProduct(props) {
-  const { classes, image, name, dscription } = props;
+  const { classes, image, name, dscription, price } = props;
   return (
     <div>
       <Card className={classes.card}>
@@ -55,6 +55,7 @@ function CardProduct(props) {
           <Button size="small" color="primary">
             Learn More
           </Button>
+          <div>{price}</div>
         </CardActions>
       </Card>
     </div>

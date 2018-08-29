@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import product from './product';
-import category from './category';
+import filter from './filter';
+import initialState from './initialState';
 
 const rootReducer = combineReducers({
-    product,
-    category
+    filter,
+    initialState
 })
 
 export default rootReducer;

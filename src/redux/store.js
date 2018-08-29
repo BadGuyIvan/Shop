@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import history from "./history";
 
-const initialState = [];
+const initialState = {};
 const middlewares = [routerMiddleware(),thunk];
 
 const store = createStore(

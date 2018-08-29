@@ -48,6 +48,7 @@ class Search extends Component {
     }
 
     SearchByClick = () => {
+        const { sizePage } = this.props
         if(!this.state.error && this.state.search){
             this.props.getProductsBySearch(this.state.search);
             this.setState({search: ''})
@@ -94,8 +95,14 @@ Search.propTypes = {
     classes: PropTypes.object.isRequired,
   };
 
+  const mapStateToProps = state => {
+    return {
+        sizePage: state.filter.sizePage
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({ getProductsBySearch }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Search));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Search));

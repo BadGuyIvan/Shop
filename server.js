@@ -4,28 +4,24 @@ import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import express from "express";
 import logger from 'morgan'
-import { json, urlencoded } from 'body-parser';
-
+import bodyParser from 'body-parser';
 import config from "./webpack.devlopment.config";
 import models from './models';
 
 //Import Router
-import Product from "./api/product";
-import Category from "./api/category";
-import Search from './api/search';
+import initialState from './api/initialState';
+import Filter from "./api/filter";
 
 const app = express();
 const compiler = webpack(config);
 
+app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //Router
-app.use(Product);
-app.use(Category);
-app.use(Search);
-
-app.use(logger('dev'));
-app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(Filter);
+app.use(initialState);
 
 app.use(
     webpackDevMiddleware(compiler, {
@@ -37,11 +33,11 @@ app.use(webpackHotMiddleware(compiler));
 
 app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
-models.sequelize.sync().then(() => {
+// models.sequelize.sync().then(() => {
+// })
     app.listen(3000, err => {
         if(err) {
             return console.error(err);
         }
         console.log('Listening at http://localhost:3000');
     })
-})
