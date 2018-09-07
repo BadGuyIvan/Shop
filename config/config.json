@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "Ovelordl1956",
-    "database": "2",
-    "host": "localhost",
+    "username": "yqwtmdwd",
+    "password": "ei9E4CScaWZ33SbfdX1aSiUsrU0aIhQr",
+    "database": "yqwtmdwd",
+    "host": "elmer.db.elephantsql.com",
     "dialect": "postgres"
   },
   "test": {

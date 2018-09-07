@@ -18,23 +18,18 @@ const styles = theme => ({
   });
 
   class Content extends Component {
-    
     componentDidMount(){
-      const query = {
-        page: 1,
-        sizePage: this.props.sizePage,
-      }
-        this.props.getAllProduct(query)
+        // this.props.getAllProduct()
     }
     render(){
       const { classes, product } = this.props;
         return (
           <Fragment>
             {
-              product.map(item => {
+             product && product.map(item => {
                 return (
                   <Grid item className={classes.paper} key={item.id} xs={12} sm={6} md={4} lg={3} xl={3}>
-                    <Card image={item.Images[0].url} name={item.name} price={item.price} dscription={item.dscription}/>
+                    <Card image={item.Images[0].url} data={item}/>
                   </Grid>
                 )
               })
@@ -50,9 +45,7 @@ const styles = theme => ({
 
   const mapStateToProps = state => {
       return {
-          product: state.filter.products,
-          sizePage: state.filter.sizePage,
-          price: state.initialState.price
+          product: state.filter.products
       }
   }
   

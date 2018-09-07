@@ -10,7 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     contact: {
       type: DataTypes.STRING
     }
-  }, { timestamps: false });
+  }, {
+    hook: {
+      afterCreate: (mainModel, next) => {
+        console.log(this.associations.OrderProducts.target.create());
+      }
+    }
+  });
   Order.associate = function(models) {
     Order.belongsToMany(models.Product, {through: 'OrderProducts'});
   };

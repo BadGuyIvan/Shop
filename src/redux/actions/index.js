@@ -1,12 +1,19 @@
 import axios from 'axios';
+import _ from "lodash";
+
 import {
     GET_ALL_PRODUCT, 
-    CHENGED_CATEGORY, 
+    CHANGED_CATEGORY, 
     GET_PRODUCTS_BY_SEARCH, 
     PAGINATION,
     GET_PRODUCTS_BY_PRICE,
     CHANGED_SIZE_PAGE,
-    INITIAL_STATE
+    INITIAL_STATE,
+    FECTH_PRODUCT_TO_ORDER,
+    DELETE_PRODUCT_FROM_ORDER,
+    FETCH_PROPS,
+    ADD_QT,
+    DISCARD_QT
 } from './constants';
 
 import store from "../store";
@@ -15,8 +22,7 @@ export const getAllProduct = () => {
     return dispatch => {
         return axios.get('/products', {
             params: {
-                ...store.getState().filter,
-                products: []
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price'])
             }
         })
             .then(res => {
@@ -35,14 +41,14 @@ export const changedCategory = (categories) => {
     return dispatch => {
         return axios.get(`/products`, {
             params: {
-                ...store.getState().filter,
-                products: [],
-                categories
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price']),
+                categories,
+                page: 1
             }
         })
             .then(res => {
                 dispatch({
-                    type: CHENGED_CATEGORY,
+                    type: CHANGED_CATEGORY,
                     payload: {
                         categories,
                         page: 1,
@@ -58,8 +64,7 @@ export const getProductsBySearch = (search) => {
     return dispatch => {
         return axios.get(`/products`,{
             params: {
-                ...store.getState().filter,
-                products: [],
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price']),
                 search
             }
         })
@@ -81,8 +86,7 @@ export const Pagination = (page) => {
     return dispatch => {
         return axios.get('/products',{
             params: {
-                ...store.getState().filter,
-                products: [],
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price']),
                 page
             }
         })
@@ -102,8 +106,8 @@ export const changedSizePage = (sizePage) => {
     return dispatch => {
         return axios.get('/products',{
             params: {
-                ...store.getState().filter,
-                products: [],
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price']),
+                page: 1,
                 sizePage
             }
         })
@@ -112,6 +116,8 @@ export const changedSizePage = (sizePage) => {
                 dispatch({
                 type: CHANGED_SIZE_PAGE,
                 payload: {
+                    sizePage,
+                    page: 1,
                     pages: res.data.pages,
                     products: res.data.products
                 }
@@ -121,40 +127,32 @@ export const changedSizePage = (sizePage) => {
     }
 }
 
-// export const getProductsByPrice = ({ category, page, sizePage, min, max}) => {
-//     console.log(`min ${min} max ${max}`);
-//     return dispatch => {
-//         return axios.get('/products', {
-//             params: {
-//                 category,
-//                 page,
-//                 sizePage,
-//                 price: JSON.stringify({
-//                     min,
-//                     max
-//                 })
-//                 // minPrice: min,
-//                 // maxPrice: max                
-//             }
-//         })
-//             .then(res => {
-//                 dispatch({
-//                     type: GET_PRODUCTS_BY_PRICE,
-//                     payload: {
-//                         category,
-//                         page,
-//                         sizePage,
-//                         price: {
-//                             min,
-//                             max
-//                         },
-//                         pages: res.data.pages,
-//                         products: res.data.product
-//                     }
-//                 })
-//             })
-//     }
-// }
+export const getProductsByPrice = ( min, max) => {
+    return dispatch => {
+        return axios.get('/products', {
+            params: {
+                ..._.pick(store.getState().filter, ['categories', 'search', 'page', 'sizePage', 'price']),
+                price: {
+                    min,
+                    max
+                }               
+            }
+        })
+            .then(res => {
+                dispatch({
+                    type: GET_PRODUCTS_BY_PRICE,
+                    payload: {
+                        price: {
+                            min,
+                            max
+                        },
+                        pages: res.data.pages,
+                        products: res.data.products
+                    }
+                })
+            })
+    }
+}
 
 export const initialState = () => {
     return dispatch => {
@@ -163,8 +161,69 @@ export const initialState = () => {
                 dispatch({
                     type: INITIAL_STATE,
                     payload: {
-                        category: res.data.category,
-                        price: res.data.price
+                        category: res.data.categories,
+                        price: res.data.price,
+                        props: res.data.props
+                    }
+                })
+            })
+    }
+}
+
+export const fetchProductToOrder = ({id,name,price}) => {
+    return {
+        type: FECTH_PRODUCT_TO_ORDER,
+        payload: {
+            id,
+            name,
+            price
+        }
+    }
+}
+
+export const deleteProductFromOrder = (id) => {
+    return {
+        type: DELETE_PRODUCT_FROM_ORDER,
+        payload: id
+    }
+}
+
+export const addQt = (id) => {
+    return {
+        type: ADD_QT,
+        payload: {
+            id
+        }
+    }
+}
+
+export const discardQt = (id) => {
+    return {
+        type: DISCARD_QT,
+        payload: {
+            id
+        }
+    }
+}
+
+export const fetchProps = (props) => {
+    return dispatch => {
+        return axios.get('/products', {
+            params: {
+                ..._.pick(store.getState().filter, 
+                ['categories', 'search', 'page', 'sizePage', 'price','props']),
+                page: 1,
+                props              
+            }
+        })
+            .then(res => {
+                dispatch({
+                    type: FETCH_PROPS,
+                    payload: {
+                        props,
+                        page: 1,
+                        pages: res.data.pages,
+                        products: res.data.products
                     }
                 })
             })

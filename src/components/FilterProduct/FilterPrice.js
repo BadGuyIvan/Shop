@@ -22,6 +22,9 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
+  wrapperPrice: {
+    marginBottom: '15px'
+  },
   button: {
     margin: theme.spacing.unit,
     width: '50%'
@@ -70,7 +73,7 @@ class SimpleExpansionPanel extends Component {
   handleApply = () => {
     const { lowerBound, upperBound } = this.state;
     const { category, sizePage } = this.props;
-    this.props.getProductsByPrice({ category, page: 1, sizePage, min: Number(lowerBound), max: Number(upperBound) })
+    this.props.getProductsByPrice( Number(lowerBound), Number(upperBound))
   }
 
   checkLowerPrice = () => {
@@ -91,10 +94,9 @@ class SimpleExpansionPanel extends Component {
 
     render(){
         const { classes, price } = this.props;
-        const { min, max }  = price;
         return (
           <div className={classes.root}>
-            <ExpansionPanel>
+            <ExpansionPanel className={classes.wrapperPrice}>
               <ExpansionPanelSummary expandIcon={<ChevronDown />}>
                 <Typography className={classes.heading}>
                   Price
@@ -105,7 +107,9 @@ class SimpleExpansionPanel extends Component {
                   <Grid item xs={4} md={6}>
                     <TextField
                       label="lower price"
-                      inputProps={{ min: min, max: max, step: "1" }} 
+                      // inputProps={{ 
+                      //   min: price.hasOwnProperty('min') ? price.min : 0, 
+                      //   max: price.hasOwnProperty('max') ? price.max : 0,step: "1" }} 
                       value={this.state.lowerBound}
                       onChange={this.onLowerBoundChange}
                       onBlur={this.checkLowerPrice}
@@ -120,7 +124,9 @@ class SimpleExpansionPanel extends Component {
                   <Grid item xs={4} md={6}>
                     <TextField
                       label='upper price'
-                      inputProps={{ min: min, max: max, step: "1" }} 
+                      // inputProps={{ 
+                      //   min: price.hasOwnProperty('min') ? price.min : 0, 
+                      //   max: price.hasOwnProperty('max') ? price.max : 0,step: "1" }} 
                       value={this.state.upperBound}
                       onChange={this.onUpperBoundChange}
                       onBlur={this.checkUpperPrice}
@@ -134,7 +140,7 @@ class SimpleExpansionPanel extends Component {
                   </Grid>
                 <Grid item xs={4} md={12}>
                   <Button variant="contained" className={classes.button} onClick={this.handleApply}>
-                    Default
+                    Apply
                   </Button>
                 </Grid>
               </Grid>

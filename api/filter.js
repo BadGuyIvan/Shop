@@ -6,23 +6,25 @@ import _ from "lodash";
 const router = express.Router();
 
 const parseQuery = (req, res, next) => {
-    req.query.price = JSON.parse(req.query.price);
+    if(req.query.price){
+        req.query.price = JSON.parse(req.query.price);
+    }
     next();
 }
 
 router.get("/products", parseQuery, (req, res) => {
-    const { categories, search, page, sizePage, price } = req.query;
+    const { categories, search, page, sizePage, price, props } = req.query;
     console.log(req.query);
-    let filter = {}
-
-    // if (price){
+    let filter = {};
+    let filterProps = [];
+    if(price){
         if(price.min){
-            _.assignIn(filter, {price: {$gte: price.min}})
+            _.merge(filter, {price: {$gte: price.min}})
         }
         if(price.max){
-            _.assignIn(filter, {price: {$lte: price.max}})
+            _.merge(filter, {price: {$lte: price.max}})
         }
-    // }
+    }
 
     if(categories){
         _.assignIn(filter, { CategoryId: { $in: categories }})
@@ -36,7 +38,7 @@ router.get("/products", parseQuery, (req, res) => {
                         $ilike: `%${search}%`
                     }
                 },{
-                    dscription: {
+                    description: {
                         $ilike: `%${search}%`
                     } 
                 }
@@ -44,11 +46,24 @@ router.get("/products", parseQuery, (req, res) => {
         })
     }
 
+    if(props){
+        filterProps = ['Images',{
+            model: models.Props,
+            required: true,
+            through: {
+                where: { value : { $in: props} }
+            }
+        }]
+    } else {
+        filterProps = ['Images']
+    }
+
+    
     models.Product.findAndCountAll({
-        where: filter,
+        where: filter,              
+        include:filterProps,
         limit: sizePage,
-        offset : sizePage * (page - 1),                
-        include: ['Images']
+        offset : sizePage * (page - 1),  
     })
     .then(response => {
         res.send({
@@ -56,137 +71,7 @@ router.get("/products", parseQuery, (req, res) => {
             products: response.rows
         });
     })
+    .catch(err => res.send({Error: err}))
 })
-
-
-    
-
-
-//     models.Product.findAll(
-//         {
-//             where: filter,
-//             limit: sizePage,
-//             offset,
-//             include: ['Images']
-//         })
-//         .then(response => res.send({
-//             pages,
-//             product: response
-//         }))
-
-
-
-//         if(category){
-//             if(category === 'all'){
-//                 models.Product.count({
-//                     where : {
-//                         'price':{
-//                             $gte: price.min,
-//                             $lte: price.max
-//                         }
-//                     }
-//                 })
-//                     .then(count => {
-//                         let pages = Math.ceil(count / sizePage);
-//                         let offset = sizePage * (page - 1); 
-//                         models.Product.findAll(
-//                             {
-//                                 where: {
-//                                     'price':{
-//                                         $gte: price.min,
-//                                         $lte: price.max
-//                                     }
-//                                 },
-//                                 limit: sizePage,
-//                                 offset,
-//                                 include: ['Images']
-//                             })
-//                             .then(response => res.send({
-//                                 pages,
-//                                 product: response
-//                             }))
-//                     })
-//             }else {
-//                 models.Category.find(
-//                     {
-//                         where: {name: category}
-//                     })
-//                     .then(category => {
-//                         models.Product.count({
-//                             where:{
-//                                 CategoryId: category.dataValues.id,
-//                                 'price':{
-//                                         $gte: price.min,
-//                                         $lte: price.max
-//                                 },
-//                             }, 
-//                         })
-//                             .then(count => {
-//                                 let pages = Math.ceil(count / sizePage);
-//                                 let offset = sizePage * (page - 1);
-//                                 models.Product.findAll(
-//                                     {
-//                                         limit: sizePage,
-//                                         offset,
-//                                         where:{
-//                                             CategoryId: category.dataValues.id,
-//                                             'price':{
-//                                                 $gte: price.min,
-//                                                 $lte: price.max
-//                                             }
-//                                         }, 
-//                                         include: ['Images']
-//                                     })
-//                                     .then(response => res.send({
-//                                         pages,
-//                                         product: response
-//                                     }))
-//                             })
-//                 })
-//             }
-//         } else if(search){
-//             models.Product.count({
-//                 where: {
-//                     $or: [
-//                             {
-//                                 name: {
-//                                     $ilike: `%${search}%`
-//                                 }
-//                             },{
-//                                 dscription: {
-//                                     $ilike: `%${search}%`
-//                                 } 
-//                             }
-//                         ]
-//                     }
-//             })
-//             .then(count => {
-//                 let pages = Math.ceil(count / sizePage);
-//                 let offset = sizePage * (page - 1);
-//                 models.Product.findAll({
-//                     limit: sizePage,
-//                     offset,
-//                     where: {
-//                         $or: [
-//                                 {
-//                                     name: {
-//                                         $ilike: `%${search}%`
-//                                     }
-//                                 },{
-//                                     dscription: {
-//                                         $ilike: `%${search}%`
-//                                     } 
-//                                 }
-//                             ]
-//                         }, include: ['Images']
-//                     })
-//                 .then(response => res.send({
-//                     pages,
-//                     product: response
-//                 }))
-//             })
-//         } 
-//     }
-// )
 
 export default router;

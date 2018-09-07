@@ -6,11 +6,11 @@ import express from "express";
 import logger from 'morgan'
 import bodyParser from 'body-parser';
 import config from "./webpack.devlopment.config";
-import models from './models';
-
+import _ from 'lodash';
 //Import Router
 import initialState from './api/initialState';
 import Filter from "./api/filter";
+import Order from "./api/orders";
 
 const app = express();
 const compiler = webpack(config);
@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 //Router
 app.use(Filter);
 app.use(initialState);
+app.use(Order)
 
 app.use(
     webpackDevMiddleware(compiler, {
@@ -33,8 +34,8 @@ app.use(webpackHotMiddleware(compiler));
 
 app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
-// models.sequelize.sync().then(() => {
-// })
+
+// models.sequelize.sync();
     app.listen(3000, err => {
         if(err) {
             return console.error(err);
