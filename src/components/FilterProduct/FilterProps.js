@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -13,14 +13,56 @@ import { ChevronDown } from 'mdi-material-ui';
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { initialState, fetchProps } from "../../redux/actions"
-
+import Grid from '@material-ui/core/Grid';
 const styles = theme => ({
   root: {
     // width: '100%',
     // backgroundColor: theme.palette.background.paper,
     marginBottom: '15px'
   },
+  listItem: {
+    [theme.breakpoints.between('xs', 'xl')]: {
+      padding: 0,
+    }
+  },
+  countProduct: {
+    display: 'block',
+    textAlign: 'center',
+    backgroundColor: "#8888",
+    padding: 10,
+    borderRadius: 4
+  },
+  invisible: {
+    display: 'none'
+  }
 });
+
+
+const My_theme = createMuiTheme({
+    overrides: {
+      MuiExpansionPanelDetails: {
+        root: {
+          padding: 0,
+          margin: 0
+        }
+      },
+      MuiList: {
+        root: {
+          width: '100%'
+        }
+      },
+      MuiListItem: {
+        root: {
+          padding: 0,
+          margin: 0
+        },
+        gutters: {
+          paddingLeft: 0,
+          paddingRight: 0
+        }
+      }
+    }
+  });
 
 class FilterProps extends React.Component {
   state = {
@@ -32,7 +74,7 @@ class FilterProps extends React.Component {
 //   }
 
   handleToggle = value => (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -42,9 +84,9 @@ class FilterProps extends React.Component {
     } else {
         newChecked.splice(currentIndex, 1);
     }
-    
+    console.log(checked);    
     this.props.fetchProps(newChecked)
-    console.log(newChecked);
+    // console.log(newChecked);
     this.setState({
       checked: newChecked,
     });
@@ -52,10 +94,11 @@ class FilterProps extends React.Component {
 
   render() {
     const { classes, props } = this.props;
-    console.log(props);
+    console.log(props.map(r => r.value));
     return (
     //   <div className={classes.root}>
     <Fragment>
+        <MuiThemeProvider theme={My_theme}>
         {
             props && props.map((props, index) => {
                 return (
@@ -66,29 +109,40 @@ class FilterProps extends React.Component {
                         </Typography>
                     </ExpansionPanelSummary><ExpansionPanelDetails>
                         <List>
-                        {props.value.map((value, index) => (
+                        {props.value.map((name, index) => (
                             <ListItem
                                 key={index}
                                 role={undefined}
                                 dense
                                 button
-                                onClick={this.handleToggle(value)}
+                                onClick={this.handleToggle(name)}
                                 className={classes.listItem}
                             >
                             <Checkbox
-                                checked={this.state.checked.indexOf(value) !== -1}
+                                checked={this.state.checked.indexOf(name) !== -1}
                                 tabIndex={-1}
                                 disableRipple
                             />
-                            <ListItemText primary={value} />
+                            <Grid container justify="center" alignItems="center">
+                                <Grid item xs={8} sm={8} md={8} lg={8}>
+                                    <ListItemText primary={name.value} />
+                                </Grid>
+                                <Grid item xs={4} sm={4} md={4} lg={4}>
+                                    {
+                                        !this.state.checked.some(item => item.value === name.value) &&
+                                        <ListItemText classes={{primary: classes.countProduct}} primary={name.productCount} />
+                                    }
+                                </Grid>
+                            </Grid>
                             </ListItem>
                         ))}
                         </List>
-                    </ExpansionPanelDetails>
-                    </ExpansionPanel> 
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
                 )
             })
         }
+                    </MuiThemeProvider>
         </Fragment>
     );
   }

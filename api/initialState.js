@@ -4,7 +4,14 @@ import _ from "lodash";
 const router = express.Router();
 
 const allCategory = async () => {
-   return models.Category.findAll()
+   return models.Category.findAll({
+    group: ['Category.id'],
+    attributes: ['name','id',[sequelize.fn('count', sequelize.col('Products.CategoryId')), 'productCount']], 
+    include:[{
+        attributes: [],
+        model: models.Product
+    }],
+   })
         .then(categories => categories)
 }
 
@@ -21,7 +28,7 @@ const MinAndMaxPrice = () => {
 const merge = (a,b) => {
     let props = [];
         a.forEach(item => {
-            let propseValue = b.filter(p => p.PropsId === item.id).map(item => item.value);
+            let propseValue = b.filter(p => p.PropsId === item.id);
             props.push({
                 name: item.name,
                 CategoryId: item.CategoryId,
@@ -37,7 +44,14 @@ const props = () => {
 }
 
 const value = () => {
-    return models.ProductProps.findAll()
+    return models.ProductProps.findAll({
+        group: ['ProductProps.value','ProductProps.PropsId'],
+        attributes: [
+            'value',
+            'PropsId',
+            [sequelize.fn('count', sequelize.col('ProductId')), 'productCount']
+        ]
+    })
         .then(propsValue => propsValue)
 }
 

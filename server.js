@@ -7,6 +7,8 @@ import logger from 'morgan'
 import bodyParser from 'body-parser';
 import config from "./webpack.devlopment.config";
 import _ from 'lodash';
+import models from './models';
+import sequelize from 'sequelize';
 //Import Router
 import initialState from './api/initialState';
 import Filter from "./api/filter";

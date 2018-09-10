@@ -24,7 +24,7 @@ router.post("/orders", (req, res) => {
             const productId = products.map(product => product.id);
             order.addProducts(productId)
         })
-        // .then(r => console.log(r))
+        .then(r => res.status(200).send('successful'))
         .catch(err => console.log(err))
 })
 

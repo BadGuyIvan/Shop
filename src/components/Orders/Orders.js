@@ -47,11 +47,24 @@ const styles = theme => ({
     },
     textField: {
       marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      // minWidth: 100,
-      // maxWidth: 100
+      marginRight: theme.spacing.unit
     },
   });
+
+const Success = () => {
+  return(
+    <Grid container justify="center" alignItems="center" direction='column'>
+      <Grid item lg={12}>
+        <h2>Your order has been successfully sent</h2>
+      </Grid>
+      <Grid item lg={12} justif='center'>
+        <Button variant="outlined" size="small" component={Link} to="/">
+          Continue Shopping
+        </Button>
+      </Grid>
+    </Grid>
+  )
+}
 
 class Orders extends Component {
 
@@ -74,7 +87,6 @@ class Orders extends Component {
   }
 
   SendOrder = (event) => {
-    event.preventDefault();
     let order = {
       total: this.props.total,
       products: this.props.products,
@@ -84,16 +96,31 @@ class Orders extends Component {
     axios.post('/orders', {
       order
     })
-    .then(response => console.log(response.data))
+    .then(response => this.setState({successful: response.data}))
+
+    localStorage.removeItem('order')
+    localStorage.removeItem('total')
+  }
+
+  SaveOrder = () => {
+    const order = this.props.products;
+    const total = this.props.total;
+    localStorage.setItem('order', JSON.stringify(order));
+    localStorage.setItem('total',total)
   }
 
   state = {
-    email: ''
+    successful: null
   }
 
   render() {
     const { classes, products, total } = this.props;
+    console.log(this.state.successful)
     return (
+        this.state.successful
+        ? 
+          <Success/> 
+        :
         <Grid container justify="center" className={classes.root}>
           <Grid item lg={12} className={classes.center} component='h2'>
             Orders
@@ -150,7 +177,7 @@ class Orders extends Component {
           </Table>
           </Grid>
             <Grid item lg={12} className={ classes.wrapperNav }>
-              <Button className={classes.buttonCart} variant="outlined" size="small" component={Link} to="/"
+              <Button className={classes.buttonCart} variant="outlined" size="small" onClick={this.SaveOrder}  component={Link} to="/"
                   >
                     Continue Shopping
               </Button>

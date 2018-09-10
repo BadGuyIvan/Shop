@@ -6,9 +6,11 @@ import {
  } from "../actions/constants";
 import _ from "lodash";
 
+const products = localStorage.getItem('order');
+const total = localStorage.getItem('total');
 const initialState = {
-    product: [],
-    total: 0
+    product: localStorage.getItem('order') ? JSON.parse(products): [],
+    total: localStorage.getItem('total') ? JSON.parse(total): 0
 }
 
 export default function(state = initialState,action) {

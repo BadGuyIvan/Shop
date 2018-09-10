@@ -9,34 +9,16 @@ const ButtonStyle = {
 };
 
 const styles = theme => ({
-  [theme.breakpoints.up("xs")]: {
+  [theme.breakpoints.between('xs', 'sm')] : {
     wrapper: {
-      display: 'flex',
-      justifyContent: 'flex-end'
+    display: 'flex',
+    justifyContent: 'flex-end'
     }
   },
-  [theme.breakpoints.up("sm")]: {
-    wrapper: {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    }
-  },
-  [theme.breakpoints.up("md")]: {
+  [theme.breakpoints.between('md', 'xl')] : {
     wrapper: {
       display: 'flex',
       justifyContent: 'center'
-    }
-  },
-  [theme.breakpoints.up("lg")]: {
-    wrapper: {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    }
-  },
-  [theme.breakpoints.up("xl")]: {
-    wrapper: {
-      display: 'flex',
-      justifyContent: 'flex-end'
     }
   }
 })
