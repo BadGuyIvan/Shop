@@ -1,6 +1,6 @@
-import express from 'express';
-import models from "../models";
-import _ from "lodash";
+const express = require('express');
+const models = require("../models");
+const _ =  require("lodash");
 
 const router = express.Router();
 
@@ -73,4 +73,4 @@ router.get("/products", parseQuery, (req, res) => {
     .catch(err => res.send({Error: err}))
 })
 
-export default router;
+module.exports = router;

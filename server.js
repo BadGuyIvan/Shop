@@ -1,18 +1,18 @@
-import path from "path";
-import webpack from 'webpack';
-import webpackDevMiddleware from "webpack-dev-middleware";
-import webpackHotMiddleware from "webpack-hot-middleware";
-import express from "express";
-import logger from 'morgan'
-import bodyParser from 'body-parser';
-import config from "./webpack.devlopment.config";
-import _ from 'lodash';
-import models from './models';
-import sequelize from 'sequelize';
+// import path from "path";
+const webpack = require('webpack');
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpackHotMiddleware = require("webpack-hot-middleware");
+const express = require("express");
+const logger = require('morgan')
+const bodyParser = require('body-parser');
+const config = require("./webpack.devlopment.config");
+const _ = require('lodash');
+const models = require('./models');
+const sequelize = require('sequelize');
 //Import Router
-import initialState from './api/initialState';
-import Filter from "./api/filter";
-import Order from "./api/orders";
+const initialState = require('./api/initialState');
+const Filter = require("./api/filter");
+const Order = require("./api/orders");
 const app = express();
 const compiler = webpack(config);
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -64,7 +64,7 @@ if (isDevelopment) {
 
 // models.sequelize.sync();
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, err => {
     if(err) {

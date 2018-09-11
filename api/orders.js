@@ -1,6 +1,6 @@
-import express from 'express';
-import models from "../models";
-import _ from "lodash";
+const express = require('express');
+const models = require("../models");
+const _ = require("lodash");
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.post("/orders", (req, res) => {
         .catch(err => console.log(err))
 })
 
-export default router;
+module.exports = router;

@@ -9,11 +9,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/babel-watch server.js",
+    "start": "node server.js",
     "dev": "./node_modules/.bin/babel-watch server.js",
     "heroku-postbuild": "webpack --config webpack.devlopment.config.js" 
   },
-  "proxy": "http://localhost:5000",
   "author": "",
   "license": "ISC",
   "dependencies": {

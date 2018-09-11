@@ -1,6 +1,7 @@
-import express from 'express';
-import models, { sequelize } from "../models";
-import _ from "lodash";
+const express = require('express');
+const models = require("../models");
+const sequelize = require('../models').sequelize
+const _ = require("lodash");
 const router = express.Router();
 
 const allCategory = async () => {
@@ -73,4 +74,4 @@ router.get("/initialState",(req, res) => {
     }).catch(err => res.send({Error : err}))
 })
 
-export default router;
+module.exports = router;
