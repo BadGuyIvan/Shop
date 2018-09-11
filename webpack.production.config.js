@@ -11,7 +11,7 @@ const devMode = true;
 
 module.exports = {
     mode: 'production',
-    entry: './src/index.js',
+    entry: path.resolve('src/index.js'),
     output: {
         publicPath: '/',
         filename: 'bundle.js',
