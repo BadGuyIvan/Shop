@@ -55,5 +55,5 @@ const port = process.env.PORT || 5000;
         if(err) {
             return console.error(err);
         }
-        console.log('Listening at http://localhost:3000');
+        console.log(`Listening at ${port}`);
     })

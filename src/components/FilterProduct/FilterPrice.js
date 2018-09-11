@@ -37,10 +37,6 @@ const styles = theme => ({
   },
 });
 
-
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
-
 class SimpleExpansionPanel extends Component {
 
   state = {
