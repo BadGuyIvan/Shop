@@ -44,7 +44,7 @@ app.get('/r', (req,res) => {
         .catch(err => res.send({Error: err}))
 })
 
-app.get('/', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
 
 // models.sequelize.sync();
