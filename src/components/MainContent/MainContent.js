@@ -42,6 +42,7 @@ class MainContent extends Component {
         <div className={classes.root}>
             <Grid container>
                 <Grid item className={classes.paper} xs={12} sm={3} md={2}>
+                    <h1 className={classes.filter}>Filters</h1>
                     <Categories/>
                     <FilterPrice/>
                     <FilterProps/>

@@ -28,7 +28,7 @@ const styles = theme => ({
 class NativeSelects extends React.Component {
 
     state = {
-        sizePage: 4
+        sizePage: 8
     }
 
   handleChange = event => {

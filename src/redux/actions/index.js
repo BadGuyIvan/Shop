@@ -13,7 +13,8 @@ import {
     DELETE_PRODUCT_FROM_ORDER,
     FETCH_PROPS,
     ADD_QT,
-    DISCARD_QT
+    DISCARD_QT,
+    DELETE_ORDER
 } from './constants';
 
 import store from "../store";
@@ -202,6 +203,16 @@ export const discardQt = (id) => {
         type: DISCARD_QT,
         payload: {
             id
+        }
+    }
+}
+
+export const deleteOrder = () => {
+    return {
+        type: DELETE_ORDER,
+        payload: {
+            product: [],
+            total: 0
         }
     }
 }

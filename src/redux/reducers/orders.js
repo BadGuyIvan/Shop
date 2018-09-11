@@ -2,7 +2,8 @@ import {
     FECTH_PRODUCT_TO_ORDER,
     DELETE_PRODUCT_FROM_ORDER,
     ADD_QT,
-    DISCARD_QT
+    DISCARD_QT,
+    DELETE_ORDER
  } from "../actions/constants";
 import _ from "lodash";
 
@@ -88,6 +89,12 @@ export default function(state = initialState,action) {
                 }
             }
         break;
+        case DELETE_ORDER: {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
         default :
             return state;
     }

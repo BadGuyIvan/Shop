@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
-import { deleteProductFromOrder, addQt, discardQt } from "../../redux/actions"
+import { deleteProductFromOrder, addQt, discardQt, deleteOrder } from "../../redux/actions"
 
 const styles = theme => ({
     root: {
@@ -97,7 +97,7 @@ class Orders extends Component {
       order
     })
     .then(response => this.setState({successful: response.data}))
-
+    this.props.deleteOrder();
     localStorage.removeItem('order')
     localStorage.removeItem('total')
   }
@@ -204,7 +204,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ deleteProductFromOrder, addQt, discardQt }, dispatch)
+    return bindActionCreators({ deleteProductFromOrder, addQt, discardQt, deleteOrder }, dispatch)
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(Orders))

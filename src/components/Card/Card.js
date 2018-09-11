@@ -69,9 +69,9 @@ class CardProduct extends Component{
             </Typography>
           </CardContent>
           <CardActions >
-            <Button size="small">
+            {/* <Button size="small">
             Learn More
-            </Button>
+            </Button> */}
             <Button className={classes.buttonCart} size="small" component={Link} to="/orders"
               onClick={this.fetchProduct}
             >

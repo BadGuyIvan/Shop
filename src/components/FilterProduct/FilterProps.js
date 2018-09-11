@@ -84,8 +84,8 @@ class FilterProps extends React.Component {
     } else {
         newChecked.splice(currentIndex, 1);
     }
-    console.log(checked);    
-    this.props.fetchProps(newChecked)
+    const propsValue = newChecked.map(props => props.value);    
+    this.props.fetchProps(propsValue)
     // console.log(newChecked);
     this.setState({
       checked: newChecked,
@@ -94,7 +94,7 @@ class FilterProps extends React.Component {
 
   render() {
     const { classes, props } = this.props;
-    console.log(props.map(r => r.value));
+    // console.log(props.map(r => r.value));
     return (
     //   <div className={classes.root}>
     <Fragment>

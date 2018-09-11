@@ -13,7 +13,7 @@ export const initialState = {
     search: null,
     pages: null,
     page: 1,
-    sizePage: 4,
+    sizePage: 8,
     products: [],
     props: [],
     price: {
