@@ -18,13 +18,13 @@ module.exports = {
     //         app: path.resolve(__dirname, 'src')
     //     }
     // },
-    entry: ['react-hot-loader/patch', 'webpack-hot-middleware/client', path.resolve('src/index.js')],
+    entry: path.resolve('src/index.js'),
     output: {
         publicPath: '/',
         filename: 'bundle.js',
         path: path.resolve(__dirname, "public"),
-        hotUpdateChunkFilename: 'hot/hot-update.js',
-        hotUpdateMainFilename: 'hot/hot-update.json'
+        // hotUpdateChunkFilename: 'hot/hot-update.js',
+        // hotUpdateMainFilename: 'hot/hot-update.json'
     },
     module: {
         rules: [
