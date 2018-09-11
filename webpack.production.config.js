@@ -10,14 +10,12 @@ const htmlPlugin = new HtmlWebPackPlugin({
 const devMode = true;
 
 module.exports = {
-    // mode: 'production',
-    entry: [
-        './src/index.js'
-      ],
+    mode: 'production',
+    entry: './src/index.js',
     output: {
-        path: __dirname,
         publicPath: '/',
-        filename: 'bundle.js'
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, "public")
     },
     module: {
         rules: [
