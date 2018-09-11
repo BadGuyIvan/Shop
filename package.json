@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/babel-watch server.js",
     "dev": "./node_modules/.bin/babel-watch server.js",
-    "heroku-postbuild": "webpack --config webpack.development.config.js" 
+    "heroku-postbuild": "webpack --config webpack.devlopment.config.js" 
   },
   "author": "",
   "license": "ISC",
