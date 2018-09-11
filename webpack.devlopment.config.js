@@ -10,21 +10,10 @@ const htmlPlugin = new HtmlWebPackPlugin({
 const devMode = true;
 
 module.exports = {
-    mode: 'development',
-    // resolve: {
-    //     alias: {
-    //         config: path.resolve(__dirname, 'config.development.js'),
-    //         root: path.resolve(__dirname),
-    //         app: path.resolve(__dirname, 'src')
-    //     }
-    // },
-    entry: ['react-hot-loader/patch', 'webpack-hot-middleware/client', path.resolve('src/index.js')],
+    mode: 'production',
     output: {
         publicPath: '/',
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, "public"),
-        hotUpdateChunkFilename: 'hot/hot-update.js',
-        hotUpdateMainFilename: 'hot/hot-update.json'
+        filename: 'bundle.js'
     },
     module: {
         rules: [

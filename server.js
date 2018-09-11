@@ -48,7 +48,10 @@ app.get('/', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
 
 // models.sequelize.sync();
-    app.listen(3000, err => {
+
+const port = process.env.PORT || 5000;
+
+    app.listen(port, err => {
         if(err) {
             return console.error(err);
         }
