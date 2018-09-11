@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "./node_modules/.bin/babel-watch server.js",
-    "heroku-postbuild": "webpack --config webpack.devlopment.config.js" 
+    "heroku-postbuild": "webpack --config webpack.production.config.js" 
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +19,6 @@
     "@material-ui/core": "^1.5.0",
     "@material-ui/lab": "^1.0.0-alpha.11",
     "axios": "^0.18.0",
-    "babel-core": "^6.26.3",
-    "babel-watch": "^2.0.7",
     "body-parser": "^1.18.3",
     "connected-react-router": "^4.4.1",
     "history": "^4.7.2",
