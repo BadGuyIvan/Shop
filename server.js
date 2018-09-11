@@ -52,11 +52,11 @@ if (isDevelopment) {
 
 	app.use(webpackHotMiddleware(compiler));
 
-    app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+    app.get('/', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
     app.use(express.static(__dirname+'/public'));
 
-	app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+	app.get('/', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 }
 
 // app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
