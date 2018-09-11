@@ -13,9 +13,9 @@ import sequelize from 'sequelize';
 import initialState from './api/initialState';
 import Filter from "./api/filter";
 import Order from "./api/orders";
-
 const app = express();
 const compiler = webpack(config);
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,13 +26,13 @@ app.use(Filter);
 app.use(initialState);
 app.use(Order)
 
-app.use(
-    webpackDevMiddleware(compiler, {
-        historyApiFallback: true,
-        writeToDisk: true
-    })
-)
-app.use(webpackHotMiddleware(compiler));
+// app.use(
+//     webpackDevMiddleware(compiler, {
+//         historyApiFallback: true,
+//         writeToDisk: true
+//     })
+// )
+// app.use(webpackHotMiddleware(compiler));
 
 app.get('/r', (req,res) => {
     models.Order.findAll({
@@ -44,16 +44,31 @@ app.get('/r', (req,res) => {
         .catch(err => res.send({Error: err}))
 })
 
-app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+if (isDevelopment) {
+	app.use(webpackDevMiddleware(compiler, {
+		historyApiFallback: true,
+        writeToDisk: true
+	}));
+
+	app.use(webpackHotMiddleware(compiler));
+
+    app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+} else {
+    app.use(express.static(__dirname+'/public'));
+
+	app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+}
+
+// app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
 
 // models.sequelize.sync();
 
 const port = process.env.PORT || 5000;
 
-    app.listen(port, err => {
-        if(err) {
-            return console.error(err);
-        }
-        console.log(`Listening at ${port}`);
-    })
+app.listen(port, err => {
+    if(err) {
+        return console.error(err);
+    }
+    console.log(`Listening at ${port}`);
+})

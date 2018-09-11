@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/babel-watch server.js"
+    "start": "./node_modules/.bin/babel-watch server.js",
+    "heroku-postbuild": "webpack -p" 
   },
   "author": "",
   "license": "ISC",
