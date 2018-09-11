@@ -34,7 +34,17 @@ app.use(
 )
 app.use(webpackHotMiddleware(compiler));
 
-app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+app.get('/r', (req,res) => {
+    models.Order.findAll({
+        include: [{
+            model: models.OrderProducts
+        }]
+    })
+        .then(r => res.send(r))
+        .catch(err => res.send({Error: err}))
+})
+
+app.get('/', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 
 
 // models.sequelize.sync();

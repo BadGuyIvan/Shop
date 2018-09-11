@@ -9,10 +9,15 @@ router.post("/orders", (req, res) => {
 
     let indexProduct = 0;
     models.OrderProducts.addHook('afterBulkCreate', product => {
+        console.log('------------------------------------------')
+        // console.log(product);
+        console.log('------------------------------------------')
         Promise.all(product.map(p => {
             p.quantity = products[indexProduct++].qt
             p.save()
         }))
+            .then(r => console.log(`r ${r}`))
+            .catch(err => console.log(err))
     })
 
     models.Order.create({

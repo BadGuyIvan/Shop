@@ -68,10 +68,25 @@ const Success = () => {
 
 class Orders extends Component {
 
+  
   handleChange = name => event => {
+    // const emaiRegex =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm
+    // if(event.target.value.test(emaiRegex)){
+    //   this.setState({
+    //     error: false
+    //   })
+    //   console.log(this.state.error)
+    // } else {
+    //   this.setState({
+    //     error: true
+    //   })
+    //   console.log(this.state.error)
+    // }
+
     this.setState({
       [name]: event.target.value,
     });
+    console.log(this.state.error)
   };
 
   deleteProduct = (id) => {
@@ -92,14 +107,16 @@ class Orders extends Component {
       products: this.props.products,
       contact: this.state.email
     }
+    // if(this.state.error === true){
+      axios.post('/orders', {
+        order
+      })
+      .then(response => this.setState({successful: response.data}))
 
-    axios.post('/orders', {
-      order
-    })
-    .then(response => this.setState({successful: response.data}))
-    this.props.deleteOrder();
-    localStorage.removeItem('order')
-    localStorage.removeItem('total')
+      this.props.deleteOrder();
+      localStorage.removeItem('order')
+      localStorage.removeItem('total')
+    // }
   }
 
   SaveOrder = () => {
@@ -110,12 +127,13 @@ class Orders extends Component {
   }
 
   state = {
-    successful: null
+    successful: null,
+    error: null
   }
 
   render() {
     const { classes, products, total } = this.props;
-    console.log(this.state.successful)
+    // console.log(this.state.successful)
     return (
         this.state.successful
         ? 
@@ -129,10 +147,12 @@ class Orders extends Component {
           <TextField
             id="email"
             label="email"
+            error={this.state.error}
             fullWidth
             type="email"
             className={classes.textField}
             value={this.state.email}
+            // inputProps={{ email: `/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/` }}
             onChange={this.handleChange('email')}
             margin="normal"
           />
