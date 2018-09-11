@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/babel-watch server.js",
-    "heroku-postbuild": "webpack -p" 
+    "heroku-postbuild": "webpack --mode production" 
   },
   "author": "",
   "license": "ISC",
