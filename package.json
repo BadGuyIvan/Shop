@@ -13,6 +13,7 @@
     "dev": "./node_modules/.bin/babel-watch server.js",
     "heroku-postbuild": "webpack --config webpack.devlopment.config.js" 
   },
+  "proxy": "http://localhost:5000",
   "author": "",
   "license": "ISC",
   "dependencies": {
