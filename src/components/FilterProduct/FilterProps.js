@@ -99,6 +99,7 @@ class FilterProps extends React.Component {
     //   <div className={classes.root}>
     <Fragment>
         <MuiThemeProvider theme={My_theme}>
+          <div>
         {
             props && props.map((props, index) => {
                 return (
@@ -142,6 +143,7 @@ class FilterProps extends React.Component {
                 )
             })
         }
+        </div>
                     </MuiThemeProvider>
         </Fragment>
     );
