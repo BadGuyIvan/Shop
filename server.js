@@ -15,7 +15,7 @@ import Filter from "./api/filter";
 import Order from "./api/orders";
 const app = express();
 const compiler = webpack(config);
-const isDevelopment = process.env.NODE_ENV || "development";
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,7 +44,7 @@ app.get('/r', (req,res) => {
         .catch(err => res.send({Error: err}))
 })
 
-if (isDevelopment === 'development') {
+if (isDevelopment) {
 	app.use(webpackDevMiddleware(compiler, {
 		historyApiFallback: true,
         writeToDisk: true
@@ -55,6 +55,7 @@ if (isDevelopment === 'development') {
     app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
     app.use(express.static(__dirname+'/public'));
+
 	app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 }
 
