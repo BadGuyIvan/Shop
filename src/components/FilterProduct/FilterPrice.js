@@ -9,14 +9,11 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { ChevronDown } from 'mdi-material-ui';
 import Button from '@material-ui/core/Button';
-import Slider from 'rc-slider';
 
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { getProductsByPrice } from "../../redux/actions"
-
-import 'rc-slider/assets/index.css';
 
 const styles = theme => ({
   root: {
@@ -49,18 +46,7 @@ class SimpleExpansionPanel extends Component {
   state = {
     lowerBound: 0,
     upperBound: 0,
-  };
-  // onSliderChange =(value) => {
-  //     const [ min, max ] = value
-  //     const { category, sizePage } = this.props;
-
-  //     this.setState({
-  //       min,
-  //       max
-  //     })
-
-  //     this.props.getProductsByPrice({ category, page: 1, sizePage, min, max })
-  // }
+  }
 
   onLowerBoundChange = (e) => {
     this.setState({ lowerBound: e.target.value});
@@ -144,12 +130,6 @@ class SimpleExpansionPanel extends Component {
                   </Button>
                 </Grid>
               </Grid>
-                 {/* <Range allowCross={false} 
-                  defaultValue={[min||0, max||9999]}
-                  value={[this.state.lowerBound,this.state.upperBound]}
-                  min={min||0}
-                  max={max||9999} 
-                  onChange={this.onSliderChange} /> */}
               </ExpansionPanelDetails>
             </ExpansionPanel>
           </div>
