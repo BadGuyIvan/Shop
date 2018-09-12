@@ -29,7 +29,7 @@ const styles = theme => ({
              product && product.map(item => {
                 return (
                   <Grid item className={classes.paper} key={item.id} xs={12} sm={6} md={4} lg={3} xl={3}>
-                    <Card image={item.Images[0].url} data={item}/>
+                    <Card image={typeof item.Images !== 'undefined' ? item.Images : []} data={item}/>
                   </Grid>
                 )
               })

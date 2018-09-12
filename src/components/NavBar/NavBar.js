@@ -43,8 +43,8 @@ const NavBar = (props) => {
                     </Typography>
 
                     {
-                        order.length !== 0 
-                        ?
+                        order &&
+                        
                             <Paper className={classes.paper}>
                             <Grid container >
                                 <Grid container spacing={16} justify="space-between">
@@ -61,8 +61,7 @@ const NavBar = (props) => {
                                 </Grid>
                             </Grid>
                             </Paper>
-                        :
-                            <Button color="primary" variant="outlined">Login</Button>
+                        // <Button color="primary" variant="outlined">Login</Button>
                     }
                 </ToolBar>
             </AppBar>

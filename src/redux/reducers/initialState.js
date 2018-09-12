@@ -1,4 +1,6 @@
-import { INITIAL_STATE } from "../actions/constants";
+import { 
+    INITIAL_STATE
+} from "../actions/constants";
 
 export default function(state = {categories: [], price: {}, props: []},action) {
     switch(action.type){

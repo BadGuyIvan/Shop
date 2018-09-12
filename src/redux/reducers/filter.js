@@ -63,9 +63,7 @@ export default function(state = initialState, action ){
         case FETCH_PROPS: 
             return {
                 ...state,
-                page: action.payload.page,
-                pages: action.payload.pages,
-                products: action.payload.products
+                ...action.payload
             }
         break;
         default:

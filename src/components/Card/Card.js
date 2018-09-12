@@ -54,7 +54,7 @@ class CardProduct extends Component{
         <Card className={classes.card}>
           <CardMedia
             className={classes.media}
-            image={data.Images[0].url}
+            image={data.Images.length !== 0 ? data.Images[0].url: ''}
             title={data.name}
           />
           <CardContent>

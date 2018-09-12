@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "./node_modules/.bin/babel-watch server.js",
-    "heroku-postbuild": "webpack --config webpack.production.config.js" 
+    "build": "webpack --config webpack.production.config.js",
+    "heroku-postbuild": "webpack --config webpack.production.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -46,6 +47,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "babel-watch": "^2.0.7",
     "css-loader": "^1.0.0",
     "express": "^4.16.3",
     "file-loader": "^1.1.11",

@@ -218,13 +218,20 @@ export const deleteOrder = () => {
 }
 
 export const fetchProps = (props) => {
+    console.log(`props ${props}`)
+    const prop = _.uniq(props.map(props => props.PropsId));
+    const propsValue = props.map(props => props.value);
+    console.log(propsValue);
     return dispatch => {
         return axios.get('/products', {
             params: {
                 ..._.pick(store.getState().filter, 
                 ['categories', 'search', 'page', 'sizePage', 'price','props']),
                 page: 1,
-                props              
+                props: {
+                    prop,
+                    propsValue
+                }              
             }
         })
             .then(res => {
@@ -240,3 +247,9 @@ export const fetchProps = (props) => {
             })
     }
 }
+
+// export const calculateCountProps = (props) => {
+//     return {
+//         type: 
+//     }
+// }

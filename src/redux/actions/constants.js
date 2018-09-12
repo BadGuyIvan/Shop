@@ -12,3 +12,4 @@ export const FETCH_PROPS = 'FETCH_PROPS';
 export const ADD_QT = 'ADD_QT';
 export const DISCARD_QT = 'DISCARD_QT';
 export const DELETE_ORDER = 'DELETE_ORDER';
+export const CALCULATE_COUNT_PROPS = "CALCULATE_COUNT_PROPS";

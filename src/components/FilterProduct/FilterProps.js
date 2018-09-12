@@ -67,6 +67,7 @@ const My_theme = createMuiTheme({
 class FilterProps extends React.Component {
   state = {
     checked: [],
+    props: []
   };
 
 //   componentDidMount(){
@@ -84,26 +85,33 @@ class FilterProps extends React.Component {
     } else {
         newChecked.splice(currentIndex, 1);
     }
-    const propsValue = newChecked.map(props => props.value);    
-    this.props.fetchProps(propsValue)
-    // console.log(newChecked);
+
+    const propsValue = newChecked.map(props => props.value);
+
+    // const propsId = newChecked.map(props => props);
+    // this.setState({
+    //   props: propsId
+    // })
+    console.log(newChecked)    ;
+    this.props.fetchProps(newChecked)
     this.setState({
       checked: newChecked,
     });
   };
 
   render() {
-    const { classes, props } = this.props;
-    // console.log(props.map(r => r.value));
+    const { classes, props, categories } = this.props;
+    console.log(props);
     return (
-    //   <div className={classes.root}>
     <Fragment>
         <MuiThemeProvider theme={My_theme}>
           <div>
         {
             props && props.map((props, index) => {
                 return (
-                    <ExpansionPanel className={classes.root} key={index}>
+                    <ExpansionPanel disabled={
+                      categories.length === 0 ? false : !categories.includes(props.CategoryId)
+                      } className={classes.root} key={index}>
                     <ExpansionPanelSummary expandIcon={<ChevronDown />}>
                         <Typography className={classes.heading}>
                             {props.name}
@@ -118,6 +126,7 @@ class FilterProps extends React.Component {
                                 button
                                 onClick={this.handleToggle(name)}
                                 className={classes.listItem}
+                                // disabled={}
                             >
                             <Checkbox
                                 checked={this.state.checked.indexOf(name) !== -1}
@@ -157,6 +166,7 @@ FilterProps.propTypes = {
 const mapStateToProps = state => {
     return {
         props: state.initialState.props,
+        categories: state.filter.categories
     }
 }
 

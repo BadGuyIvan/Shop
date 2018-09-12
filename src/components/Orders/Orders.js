@@ -68,25 +68,28 @@ const Success = () => {
 
 class Orders extends Component {
 
-  
-  handleChange = name => event => {
-    // const emaiRegex =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm
-    // if(event.target.value.test(emaiRegex)){
-    //   this.setState({
-    //     error: false
-    //   })
-    //   console.log(this.state.error)
-    // } else {
-    //   this.setState({
-    //     error: true
-    //   })
-    //   console.log(this.state.error)
-    // }
+  state = {
+    email: '',
+    successful: null,
+    error: null
+  }
 
+  handleChange = event => {
+    // const emaiRegex =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm
+    const emaiRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if(!event.target.value.match(emaiRegex)){
+      this.setState({
+        error: true
+      })
+    }else {
+      this.setState({
+        error: false
+      })
+    }
     this.setState({
-      [name]: event.target.value,
+      email: event.target.value,
     });
-    console.log(this.state.error)
+    console.log(this.state.error);
   };
 
   deleteProduct = (id) => {
@@ -107,7 +110,7 @@ class Orders extends Component {
       products: this.props.products,
       contact: this.state.email
     }
-    // if(this.state.error === true){
+    if(this.state.error !== true && this.state.email.length !== 0){
       axios.post('/orders', {
         order
       })
@@ -116,7 +119,16 @@ class Orders extends Component {
       this.props.deleteOrder();
       localStorage.removeItem('order')
       localStorage.removeItem('total')
-    // }
+    } else {
+      this.setState({
+        error: true
+      })
+      setTimeout(() => {
+        this.setState({
+          error: false
+        })
+      }, 3000)
+    }
   }
 
   SaveOrder = () => {
@@ -126,10 +138,11 @@ class Orders extends Component {
     localStorage.setItem('total',total)
   }
 
-  state = {
-    successful: null,
-    error: null
-  }
+  isEmpty = () => {
+    if(this.state.error === true){
+        this.setState({error: false});
+    }
+}
 
   render() {
     const { classes, products, total } = this.props;
@@ -141,19 +154,19 @@ class Orders extends Component {
         :
         <Grid container justify="center" className={classes.root}>
           <Grid item lg={12} className={classes.center} component='h2'>
-            Orders
+            Card
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
-            id="email"
             label="email"
             error={this.state.error}
+            helperText={this.state.error && 'email field is not correctly'}
             fullWidth
-            type="email"
+            onBlur={this.isEmpty}
             className={classes.textField}
             value={this.state.email}
             // inputProps={{ email: `/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/` }}
-            onChange={this.handleChange('email')}
+            onChange={this.handleChange}
             margin="normal"
           />
           </Grid>
