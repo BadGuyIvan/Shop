@@ -12,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { ChevronDown } from 'mdi-material-ui';
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { initialState, fetchProps } from "../../redux/actions"
+import { initialFilters, fetchProps } from "../../redux/actions"
 import Grid from '@material-ui/core/Grid';
 const styles = theme => ({
   root: {
@@ -70,12 +70,7 @@ class FilterProps extends React.Component {
     props: []
   };
 
-//   componentDidMount(){
-//     //   this.props.initialState();
-//   }
-
   handleToggle = value => (event) => {
-    // event.stopPropagation();
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -86,14 +81,11 @@ class FilterProps extends React.Component {
         newChecked.splice(currentIndex, 1);
     }
 
-    const propsValue = newChecked.map(props => props.value);
+    const filterProps = _.map(newChecked, object => {
+      return _.pick(object, ['value','PropsId'])
+    })
 
-    // const propsId = newChecked.map(props => props);
-    // this.setState({
-    //   props: propsId
-    // })
-    console.log(newChecked)    ;
-    this.props.fetchProps(newChecked)
+    this.props.fetchProps(filterProps)
     this.setState({
       checked: newChecked,
     });
@@ -101,7 +93,7 @@ class FilterProps extends React.Component {
 
   render() {
     const { classes, props, categories } = this.props;
-    console.log(props);
+    // console.log(props);
     return (
     <Fragment>
         <MuiThemeProvider theme={My_theme}>
@@ -109,9 +101,11 @@ class FilterProps extends React.Component {
         {
             props && props.map((props, index) => {
                 return (
-                    <ExpansionPanel disabled={
-                      categories.length === 0 ? false : !categories.includes(props.CategoryId)
-                      } className={classes.root} key={index}>
+                    <ExpansionPanel 
+                    // disabled={
+                    //   categories.length === 0 ? false : !categories.includes(props.CategoryId)
+                    //   } 
+                      className={classes.root} key={index}>
                     <ExpansionPanelSummary expandIcon={<ChevronDown />}>
                         <Typography className={classes.heading}>
                             {props.name}
@@ -165,7 +159,7 @@ FilterProps.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        props: state.initialState.props,
+        props: state.initialFilters.props,
         categories: state.filter.categories
     }
 }

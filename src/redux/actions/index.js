@@ -8,7 +8,7 @@ import {
     PAGINATION,
     GET_PRODUCTS_BY_PRICE,
     CHANGED_SIZE_PAGE,
-    INITIAL_STATE,
+    INITIAL_FILTERS,
     FECTH_PRODUCT_TO_ORDER,
     DELETE_PRODUCT_FROM_ORDER,
     FETCH_PROPS,
@@ -155,12 +155,12 @@ export const getProductsByPrice = ( min, max) => {
     }
 }
 
-export const initialState = () => {
+export const initialFilters = () => {
     return dispatch => {
-        return axios.get('/initialState')
+        return axios.get('/initialFilters')
             .then(res => {
                 dispatch({
-                    type: INITIAL_STATE,
+                    type: INITIAL_FILTERS,
                     payload: {
                         category: res.data.categories,
                         price: res.data.price,
@@ -218,20 +218,19 @@ export const deleteOrder = () => {
 }
 
 export const fetchProps = (props) => {
-    console.log(`props ${props}`)
-    const prop = _.uniq(props.map(props => props.PropsId));
-    const propsValue = props.map(props => props.value);
-    console.log(propsValue);
+    let wrapperProps;
+    if(props.length !== 0){
+        wrapperProps = [[...props]];
+    } else {
+        wrapperProps = [];
+    }
     return dispatch => {
         return axios.get('/products', {
             params: {
                 ..._.pick(store.getState().filter, 
                 ['categories', 'search', 'page', 'sizePage', 'price','props']),
                 page: 1,
-                props: {
-                    prop,
-                    propsValue
-                }              
+                props: wrapperProps      
             }
         })
             .then(res => {

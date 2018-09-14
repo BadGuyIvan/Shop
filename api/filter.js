@@ -9,18 +9,14 @@ const parseQuery = (req, res, next) => {
         req.query.price = JSON.parse(req.query.price);
     }
     if(req.query.props) {
-        req.query.props = JSON.parse(req.query.props);
+        const props = JSON.parse(req.query.props);
+        req.query.props = props;
     }
     next();
 }
 
 router.get("/products", parseQuery, (req, res) => {
     const { categories, search, page, sizePage, price, props } = req.query;
-    console.log(req.query);
-    // console.log(props.prop);
-    // console.log(props.propsValue);
-    // const valueProps = props.propsValue.map(item => item.value)
-    // console.log(`Value : ${valueProps}`)
     let filter = {};
     let filterProps = [];
     if(price){
@@ -53,25 +49,22 @@ router.get("/products", parseQuery, (req, res) => {
     }
 
     if(props){
-        filterProps = ['Images',{
-            model: models.Props,
-            where: {
-                id: { $in : props.prop}
-                    
-            },
-            required: true,
-            through: {
-                where: { value : { $in: props.propsValue} }
-            }
-        }]
-    } else {
+            filterProps = ['Images',{
+                model: models.Props,
+                required: true,
+                through: {
+                    where: { 
+                        $and: props
+                    }
+                }
+            }]
+    }else {
         filterProps = ['Images']
     }
 
-    console.log(filter)
     models.Product.findAndCountAll({
-        where: filter,              
         include:filterProps,
+        where: filter,              
         limit: sizePage,
         offset : sizePage * (page - 1),  
     })

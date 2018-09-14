@@ -10,7 +10,7 @@ const _ = require('lodash');
 const models = require('./models');
 const sequelize = require('sequelize');
 //Import Router
-const initialState = require('./api/initialState');
+const initialFilter = require('./api/initialFilter');
 const Filter = require("./api/filter");
 const Order = require("./api/orders");
 const app = express();
@@ -23,28 +23,9 @@ app.use(bodyParser.json());
 
 //Router
 app.use(Filter);
-app.use(initialState);
+app.use(initialFilter);
 app.use(Order)
 
-app.get('/r', (req,res) => {
-    models.Order.findAll({
-        // include: [{
-        //     model: models.OrderProducts
-        // }]
-    })
-        .then(r => res.send(r))
-        .catch(err => res.send({Error: err}))
-})
-
-app.get('/o', (req,res) => {
-    models.OrderProducts.findAll({
-        // include: [{
-        //     model: models.OrderProducts
-        // }]
-    })
-        .then(r => res.send(r))
-        .catch(err => res.send({Error: err}))
-})
 if (isDevelopment) {
 	app.use(webpackDevMiddleware(compiler, {
 		historyApiFallback: true,
@@ -52,28 +33,6 @@ if (isDevelopment) {
     }));
 
 	app.use(webpackHotMiddleware(compiler));
-    
-app.get('/g', (req,res) => {
-    models.Product.findAll({
-        include: [{
-            model: models.Props,
-                where: {
-                    $between:[{
-                        id: 6
-                    },
-                    {
-                        id: 5
-                    }]
-                }
-            }
-        ]
-    })
-        .then(e => {
-            res.send(e)
-        })
-        .catch(err => res.send({Error: err}))
-})
-
     // models.sequelize.sync();
     app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
@@ -81,25 +40,17 @@ app.get('/g', (req,res) => {
     
 	app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 }
-
-
-
-// app.get('*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
-
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 58355;
 
 // models.sequelize.sync()
 //     .then(() => console.log('Nice! Database looks fine'))
 //     .catch(err => console.log(err))
+
 app.listen(port, err => {
     if(err) {
         return console.error(err);
     }
     console.log(`Listening at ${port}`);
 })
-    
-// models.sequelize.sync().then(() => {
-//     console.log('1111111111111111111111111111111111111111111111111111111111111')
-// });
 
 

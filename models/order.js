@@ -9,7 +9,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     contact: {
       type: DataTypes.STRING
-    }
+    },
+    trackCode: {
+     type: DataTypes.STRING,
+     defaultValue: 'No trackcode'
+   },
+   isDelivered: {
+     type: DataTypes.BOOLEAN,
+     defaultValue: false
+   }
   });
   Order.associate = function(models) {
     Order.belongsToMany(models.Product, {through: 'OrderProducts'});

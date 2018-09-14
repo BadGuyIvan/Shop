@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     available: {
   		type: DataTypes.BOOLEAN,
   		defaultValue: false,
+    },
+    isDeleted: {
+  		type: DataTypes.BOOLEAN,
+  		defaultValue: false,
   	}
   });
   Product.associate = function(models) {

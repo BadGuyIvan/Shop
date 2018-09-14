@@ -13,7 +13,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
+import Address from '../Address/Address';
 import { deleteProductFromOrder, addQt, discardQt, deleteOrder } from "../../redux/actions"
+
 
 const styles = theme => ({
     root: {
@@ -70,6 +72,7 @@ class Orders extends Component {
 
   state = {
     email: '',
+    address:'',
     successful: null,
     error: null
   }
@@ -91,7 +94,13 @@ class Orders extends Component {
     });
     console.log(this.state.error);
   };
-
+  handleChangeAddress = event => {
+    // const emaiRegex =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm
+    
+    this.setState({
+      address: event.target.value,
+    });
+  };
   deleteProduct = (id) => {
     this.props.deleteProductFromOrder(id)
   }
@@ -146,7 +155,6 @@ class Orders extends Component {
 
   render() {
     const { classes, products, total } = this.props;
-    // console.log(this.state.successful)
     return (
         this.state.successful
         ? 
@@ -159,6 +167,7 @@ class Orders extends Component {
           <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             label="email"
+            name="email"
             error={this.state.error}
             helperText={this.state.error && 'email field is not correctly'}
             fullWidth
@@ -169,6 +178,7 @@ class Orders extends Component {
             onChange={this.handleChange}
             margin="normal"
           />
+          <Address/>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
           <Table className={classes.table}>
@@ -182,7 +192,7 @@ class Orders extends Component {
             </TableHead>
             <TableBody>
               {
-                products.map(product => 
+                products.map((product) => 
                   <TableRow key={product.id}>
                     <TableCell component="th" scope="row">
                       {product.name}

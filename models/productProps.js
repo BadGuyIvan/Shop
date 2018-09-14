@@ -4,8 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     value: {
         type: DataTypes.STRING,
     }
-  }, { timestamps: false });
+  });
   ProductProps.associate = function(models) {
+    // ProductProps.belongsTo(models.Props);
     // ProductProps.belongsTo(models.Props);
     // ProductProps.belongsTo(models.Product);
   };

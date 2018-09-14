@@ -12,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { ChevronDown } from 'mdi-material-ui';
 import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { initialState, changedCategory } from "../../redux/actions"
+import { initialFilters, changedCategory } from "../../redux/actions"
 import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
@@ -70,7 +70,7 @@ class Categories extends React.Component {
   };
 
   componentDidMount(){
-      // this.props.initialState();
+      this.props.initialFilters();
   }
 
   handleToggle = value => () => {
@@ -147,12 +147,12 @@ Categories.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        categories: state.initialState.categories
+        categories: state.initialFilters.categories
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ initialState, changedCategory }, dispatch)
+    return bindActionCreators({ initialFilters, changedCategory }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Categories));

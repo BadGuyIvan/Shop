@@ -63,6 +63,7 @@ class CardProduct extends Component{
             </Typography>
             <Typography gutterBottom component="h3">
               ${data.price}
+              {data.discount_price !== 0 && <div>discount</div>}
             </Typography>
             <Typography className={classes.typography}  component="div">
               {data.description}
@@ -72,7 +73,7 @@ class CardProduct extends Component{
             {/* <Button size="small">
             Learn More
             </Button> */}
-            <Button className={classes.buttonCart} size="small" component={Link} to="/orders"
+            <Button disabled={!data.available} className={classes.buttonCart} size="small" component={Link} to="/orders"
               onClick={this.fetchProduct}
             >
               Add to Cart

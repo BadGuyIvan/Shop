@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING
     }
-  }, { timestamps: false });
+  });
   Props.associate = function(models) {
     Props.belongsToMany(models.Product, {through: 'ProductProps', foreignKey: "PropsId", otherKey: 'ProductId'});
   };

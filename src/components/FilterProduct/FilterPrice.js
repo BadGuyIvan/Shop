@@ -141,7 +141,7 @@ const mapStateToProps = state => {
   return {
       category: state.filter.category,
       sizePage: state.filter.sizePage,
-      price: state.initialState.price,
+      price: state.initialFilters.price,
   }
 }
 
