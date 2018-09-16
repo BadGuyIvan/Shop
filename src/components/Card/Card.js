@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -35,6 +36,16 @@ const styles = {
   },
   buttonCart: {
     textTransform: 'uppercase'
+  },
+  discountPrice: {
+    fontSize: '2.5vw',
+    fontWeight: 'bold',
+    color: '#23a023',
+    marginLeft: '1rem'
+  },
+  discountTrue: {
+    lineHeight: '2vw',
+    textDecoration: 'line-through'
   }
 };
 
@@ -62,8 +73,18 @@ class CardProduct extends Component{
               {data.name}
             </Typography>
             <Typography gutterBottom component="h3">
-              ${data.price}
-              {data.discount_price !== 0 && <div>discount</div>}
+              <Grid container>
+                <Grid className={data.discount_price !== 0 ? classes.discountTrue : undefined}>
+                  ${data.price}
+                </Grid>
+                {
+                  data.discount_price !== 0 &&
+                    <Grid item className={classes.discountPrice}>
+                      {data.discount_price}
+                    </Grid>
+                }
+              </Grid>
+              {/* {data.discount_price !== 0 && <div>discount</div>} */}
             </Typography>
             <Typography className={classes.typography}  component="div">
               {data.description}

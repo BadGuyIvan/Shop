@@ -26,6 +26,7 @@ app.use(Filter);
 app.use(initialFilter);
 app.use(Order)
 
+
 if (isDevelopment) {
 	app.use(webpackDevMiddleware(compiler, {
 		historyApiFallback: true,
@@ -34,6 +35,37 @@ if (isDevelopment) {
 
 	app.use(webpackHotMiddleware(compiler));
     // models.sequelize.sync();
+
+    app.get('/p', (req,res) => {
+        models.Product.findAll({
+            where: {
+                $and: [
+                    {
+                        '$Props.ProductProps.PropsId$': 6,
+                        '$Props.ProductProps.value$': '8.1'
+                    },
+                    {
+                        '$Props.ProductProps.PropsId$': 5,
+                        '$Props.ProductProps.value$': '16MP + 5MP dual camera'
+                    }
+                ],
+            },
+            include: [{
+                model: models.Props,
+               
+            }]
+        })
+            .then(r => res.send(r))
+            .catch(err => res.send({Error: err}))
+    })
+
+app.get('/gg', (req,res) => {
+    models.Product.findAll({
+        include: ["Props"]
+    })
+        .then(r => res.send(r))
+})
+
     app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
     app.use(express.static(__dirname+'/public'));

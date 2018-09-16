@@ -91,9 +91,12 @@ class FilterProps extends React.Component {
     });
   };
 
+  checkedProps = (categories, props) => {
+    return categories.length === 0 ? true : categories.includes(props.CategoryId)
+  }
+
   render() {
     const { classes, props, categories } = this.props;
-    // console.log(props);
     return (
     <Fragment>
         <MuiThemeProvider theme={My_theme}>
@@ -101,11 +104,11 @@ class FilterProps extends React.Component {
         {
             props && props.map((props, index) => {
                 return (
-                    <ExpansionPanel 
-                    // disabled={
-                    //   categories.length === 0 ? false : !categories.includes(props.CategoryId)
-                    //   } 
-                      className={classes.root} key={index}>
+                  <div key={index}>
+                    {
+                    this.checkedProps(categories, props) &&
+                    <ExpansionPanel
+                      className={classes.root}>
                     <ExpansionPanelSummary expandIcon={<ChevronDown />}>
                         <Typography className={classes.heading}>
                             {props.name}
@@ -143,6 +146,8 @@ class FilterProps extends React.Component {
                         </List>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
+                    }
+                    </div>
                 )
             })
         }

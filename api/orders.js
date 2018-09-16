@@ -5,12 +5,12 @@ const _ = require("lodash");
 const router = express.Router();
 
 router.post("/orders", (req, res) => {
-    const { total, date, contact, products } = req.body.order;
-    
+    const { total, date, contact, products, trackCode } = req.body.order;
     models.Order.create({
         total: total,
         date,
-        contact: contact
+        contact: contact,
+        trackCode
     })
         .then(order => {
             Promise.all(

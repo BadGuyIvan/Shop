@@ -14,7 +14,7 @@ import { connect, } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
 import Address from '../Address/Address';
-import { deleteProductFromOrder, addQt, discardQt, deleteOrder } from "../../redux/actions"
+import { deleteProductFromOrder, addQt, discardQt, deleteOrder,addres_latLng } from "../../redux/actions"
 
 
 const styles = theme => ({
@@ -51,6 +51,33 @@ const styles = theme => ({
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit
     },
+    ColQT: {
+      padding: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    [theme.breakpoints.between('xs', 'xl')] : {
+      ColQT: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+      },
+    },
+    // [theme.breakpoints.only('xs')]: {
+    //   labelQT: {
+    //     textAlign: 'center'
+    //   },
+    // },[theme.breakpoints.only('sm')]: {
+    //   labelQT: {
+    //     textAlign: 'center'
+    //   },
+    // },
+    // [theme.breakpoints.between('md', 'xl')] : {
+    //   labelQT: {
+    //     textAlign: 'right'
+    //   },
+    // }
   });
 
 const Success = () => {
@@ -73,6 +100,7 @@ class Orders extends Component {
   state = {
     email: '',
     address:'',
+    latlng: [],
     successful: null,
     error: null
   }
@@ -94,13 +122,14 @@ class Orders extends Component {
     });
     console.log(this.state.error);
   };
+
   handleChangeAddress = event => {
     // const emaiRegex =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm
-    
     this.setState({
       address: event.target.value,
     });
   };
+
   deleteProduct = (id) => {
     this.props.deleteProductFromOrder(id)
   }
@@ -114,44 +143,96 @@ class Orders extends Component {
   }
 
   SendOrder = (event) => {
-    let order = {
-      total: this.props.total,
-      products: this.props.products,
-      contact: this.state.email
-    }
-    if(this.state.error !== true && this.state.email.length !== 0){
-      axios.post('/orders', {
-        order
+    if(this.state.error !== true && this.state.email.length > 5 && !this.props.isAddressValid){
+      const deliver_information = {
+        "contacts": this.props.address,
+        "address_from": "Львів, Львівська область, Україна",
+        "point_from": {
+             "type": "Point",
+             "coordinates": [
+                 49.839683,
+                 24.029717000000005
+             ]
+         },
+         "address_to": "Нью-Йорк, США",
+         "point_to": {
+           "type": "Point",
+           "coordinates": [
+             this.props.address.lat,
+             this.props.address.lnt
+           ]
+         }
+      }
+      axios.post('https://mydeliveryapp.herokuapp.com/api/orders', 
+      {
+        ...deliver_information
+      }, {
+        "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers"
       })
-      .then(response => this.setState({successful: response.data}))
+      .then(address => {
+        axios.post('/orders', {
+          order: {
+            total: this.props.total,
+            products: this.props.products,
+            contact: this.state.email,
+            trackCode: address.data.track_code
+          }
+        })
+        .then(response => this.setState({successful: response.data}))
+      })
+      .catch(err => console.log(err))
 
       this.props.deleteOrder();
       localStorage.removeItem('order')
       localStorage.removeItem('total')
-    } else {
+      localStorage.removeItem('address')
+      localStorage.removeItem('latlnt')
+      localStorage.removeItem('email')
+      localStorage.removeItem('isAddressValid')
+    }
+
+    if( this.state.email.length === 0 )
+    {
       this.setState({
         error: true
       })
-      setTimeout(() => {
-        this.setState({
-          error: false
-        })
-      }, 3000)
     }
+    
+    if(this.props.address.length === 0){
+      this.props.addres_latLng({
+        isAddressValid: true
+      })
+    } 
   }
 
   SaveOrder = () => {
     const order = this.props.products;
     const total = this.props.total;
+    this.props.addres_latLng({email: this.state.email});
     localStorage.setItem('order', JSON.stringify(order));
     localStorage.setItem('total',total)
+    localStorage.setItem('address',this.props.address)
+    localStorage.setItem('latlnt',JSON.stringify(this.props.latlng))
+    localStorage.setItem('email',this.state.email)
+    localStorage.setItem('isAddressValid',this.props.isAddressValid)
   }
 
-  isEmpty = () => {
-    if(this.state.error === true){
-        this.setState({error: false});
-    }
-}
+//   isEmpty = () => {
+//     if(this.state.error === true){
+//         this.setState({error: false});
+//     }
+// }
+
+  isAddressValid = (error) => {
+    console.log(error)
+  }
+
+  componentDidMount(){
+    this.setState({
+      address: this.props.address,
+      email: this.props.email
+    })
+  }
 
   render() {
     const { classes, products, total } = this.props;
@@ -171,7 +252,7 @@ class Orders extends Component {
             error={this.state.error}
             helperText={this.state.error && 'email field is not correctly'}
             fullWidth
-            onBlur={this.isEmpty}
+            // onBlur={this.isEmpty}
             className={classes.textField}
             value={this.state.email}
             // inputProps={{ email: `/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/` }}
@@ -186,7 +267,7 @@ class Orders extends Component {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell numeric>Price</TableCell>
-                <TableCell numeric>Qt</TableCell>
+                <TableCell numeric className={classes.labelQT}>Qt</TableCell>
                 <TableCell numeric></TableCell>
               </TableRow>
             </TableHead>
@@ -199,9 +280,11 @@ class Orders extends Component {
                     </TableCell>
                     <TableCell numeric>${product.price}</TableCell>
                     <TableCell numeric>
-                      <Button className={classes.buttonQt} size="small" onClick={() => this.discardQuantity(product.id)}>-</Button>
-                        <span className={classes.labelQt}>{product.qt}</span>
-                      <Button className={classes.buttonQt} size="small"onClick={() => this.addQuantity(product.id)}>+</Button>
+                      <div className={classes.ColQT}>
+                        <Button className={classes.buttonQt} size="small" onClick={() => this.discardQuantity(product.id)}>-</Button>
+                          <span className={classes.labelQt}>{product.qt}</span>
+                        <Button className={classes.buttonQt} size="small"onClick={() => this.addQuantity(product.id)}>+</Button>
+                      </div>
                       </TableCell>
                     <TableCell >
                       <Button color="secondary" onClick={() => this.deleteProduct(product.id)}>Delete</Button>
@@ -242,12 +325,16 @@ Orders.propTypes = {
 const mapStateToProps = state => {
     return {
         products: state.orders.product,
-        total: state.orders.total
+        total: state.orders.total,
+        latlng: state.orders.address_latLng,
+        address: state.orders.address,
+        email: state.orders.email,
+        isAddressValid: state.orders.isAddressValid
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ deleteProductFromOrder, addQt, discardQt, deleteOrder }, dispatch)
+    return bindActionCreators({ deleteProductFromOrder, addQt, discardQt, deleteOrder, addres_latLng }, dispatch)
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(Orders))

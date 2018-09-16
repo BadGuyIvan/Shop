@@ -14,7 +14,8 @@ import {
     FETCH_PROPS,
     ADD_QT,
     DISCARD_QT,
-    DELETE_ORDER
+    DELETE_ORDER,
+    ADDRESS_LATLNG
 } from './constants';
 
 import store from "../store";
@@ -244,6 +245,13 @@ export const fetchProps = (props) => {
                     }
                 })
             })
+    }
+}
+
+export const addres_latLng = (address) => {
+    return {
+        type: ADDRESS_LATLNG,
+        payload: address
     }
 }
 

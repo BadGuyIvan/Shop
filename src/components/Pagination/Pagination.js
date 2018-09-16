@@ -12,7 +12,8 @@ const styles = theme => ({
   [theme.breakpoints.between('xs', 'sm')] : {
     wrapper: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    minWidth: '500px'
     }
   },
   [theme.breakpoints.between('md', 'xl')] : {
@@ -83,7 +84,7 @@ const Wrapper = (props) => {
   const { classes } = props;
   return (
     // className={classes.wrapper}
-          <div>
+          <div className={classes.wrapper}>
               {props.children}
           </div>
           )

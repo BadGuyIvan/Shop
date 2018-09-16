@@ -3,15 +3,18 @@ import {
     DELETE_PRODUCT_FROM_ORDER,
     ADD_QT,
     DISCARD_QT,
-    DELETE_ORDER
+    DELETE_ORDER,
+    ADDRESS_LATLNG
  } from "../actions/constants";
 import _ from "lodash";
 
-const products = localStorage.getItem('order');
-const total = localStorage.getItem('total');
 const initialState = {
-    product: localStorage.getItem('order') ? JSON.parse(products): [],
-    total: localStorage.getItem('total') ? JSON.parse(total): 0
+    product: localStorage.getItem('order') ? JSON.parse(localStorage.getItem('order')): [],
+    total: localStorage.getItem('total') ? localStorage.getItem('total'): 0,
+    address_latLng: localStorage.getItem('latlnt') ? JSON.parse(localStorage.getItem('latlnt')): [],
+    address: localStorage.getItem('address') ? localStorage.getItem('address'): '',
+    email: localStorage.getItem('email') ? localStorage.getItem('email') : '',
+    isAddressValid: localStorage.getItem('isAddressValid') ? localStorage.getItem('isAddressValid'): false
 }
 
 export default function(state = initialState,action) {
@@ -90,6 +93,13 @@ export default function(state = initialState,action) {
             }
         break;
         case DELETE_ORDER: {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
+        break;
+        case ADDRESS_LATLNG: {
             return {
                 ...state,
                 ...action.payload

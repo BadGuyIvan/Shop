@@ -35,6 +35,11 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
+  [theme.breakpoints.between('xs', 'lg')] : {
+    buttonApply: {
+      textAlign: 'center'
+    }
+  }
 });
 
 class SimpleExpansionPanel extends Component {
@@ -85,8 +90,8 @@ class SimpleExpansionPanel extends Component {
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <Grid container justify='space-around' alignItems="center" spacing={8}>
-                  <Grid item xs={4} md={6}>
+                <Grid className={classes.priceContent} container justify='space-around' alignItems="center" spacing={8}>
+                  <Grid item xs={4} sm={6} md={6}>
                     <TextField
                       label="lower price"
                       // inputProps={{ 
@@ -103,7 +108,7 @@ class SimpleExpansionPanel extends Component {
                       margin="normal"
                     />
                   </Grid>
-                  <Grid item xs={4} md={6}>
+                  <Grid item xs={4} sm={6} md={6}>
                     <TextField
                       label='upper price'
                       // inputProps={{ 
@@ -120,7 +125,7 @@ class SimpleExpansionPanel extends Component {
                       margin="normal"
                     />
                   </Grid>
-                <Grid item xs={4} md={12}>
+                <Grid className={classes.buttonApply} item xs={4} sm={12} md={12}>
                   <Button variant="contained" className={classes.button} onClick={this.handleApply}>
                     Apply
                   </Button>

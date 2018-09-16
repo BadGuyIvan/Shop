@@ -6,6 +6,11 @@ import PlacesAutocomplete, {
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 
+import { connect, } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { addres_latLng } from "../../redux/actions"
+
 const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
@@ -25,10 +30,31 @@ class LocationSearchInput extends React.Component {
 
   handleSelect = address => {
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
+       .then(results =>{
+         this.setState({
+           address: results[0].formatted_address
+         })
+         return  getLatLng(results[0])
+       }
+      )
+      .then(lantlng => {
+        const order = {
+          address_latLng: lantlng,
+          address: this.state.address,
+          isAddressValid: false
+        }
+        this.props.addres_latLng(order)
+        this.setState({
+        })
+      })
       .catch(error => console.error('Error', error));
   };
+
+  componentDidMount(){
+    this.setState({
+      address: this.props.address
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -45,6 +71,8 @@ class LocationSearchInput extends React.Component {
                 className={classes.textField}
                 label="Address"
                 name="address"
+                error={this.props.isAddressValid}
+                helperText={this.props.isAddressValid && 'Address field is not correctly'}
               {...getInputProps()}
             />
             <div className="autocomplete-dropdown-container">
@@ -52,7 +80,7 @@ class LocationSearchInput extends React.Component {
               {suggestions.map(suggestion => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
-                  : 'suggestion-item';
+                  : '0suggestion-item';
                 // inline style for demonstration purpose
                 const style = suggestion.active
                   ? { backgroundColor: '#fafafa', cursor: 'pointer' }
@@ -76,4 +104,15 @@ class LocationSearchInput extends React.Component {
   }
 }
 
-export default withStyles(styles)(LocationSearchInput);
+const mapStateToProps = state => {
+  return {
+    address: state.orders.address,
+    isAddressValid: state.orders.isAddressValid
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ addres_latLng }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LocationSearchInput));

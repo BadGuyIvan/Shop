@@ -19,6 +19,10 @@ router.get("/products", parseQuery, (req, res) => {
     const { categories, search, page, sizePage, price, props } = req.query;
     let filter = {};
     let filterProps = [];
+    console.log('###########################################################')
+    console.log(props)
+    console.log('###########################################################')
+
     if(price){
         if(price.min){
             _.merge(filter, {price: {$gte: price.min}})
@@ -49,22 +53,41 @@ router.get("/products", parseQuery, (req, res) => {
     }
 
     if(props){
+        // const propsFilter = props.map(item => {
+        //     return {
+        //         '$Props.ProductProps.PropsId$': item.PropsId,
+        //         '$Props.ProductProps.value$': item.value,
+        //     }
+        // })
+        //     _.extend(filter, {
+        //         $or: propsFilter
+        //     })
             filterProps = ['Images',{
                 model: models.Props,
-                required: true,
+                where: {
+                    id: props.map(item => item.PropsId)
+                },
                 through: {
+                    required: true,
                     where: { 
-                        $and: props
+                        $and: props.map(item => {
+                            return ({
+                                value: item.value
+                            })
+                        })
                     }
                 }
             }]
+            console.log(filterProps);
     }else {
         filterProps = ['Images']
     }
-
+    console.log('-----------------------------------------------------------------------')
+    console.log(filter)
+    console.log('-----------------------------------------------------------------------')
     models.Product.findAndCountAll({
-        include:filterProps,
         where: filter,              
+        include:filterProps,
         limit: sizePage,
         offset : sizePage * (page - 1),  
     })
