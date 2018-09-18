@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   Props.associate = function(models) {
-    Props.belongsToMany(models.Product, {through: 'ProductProps', foreignKey: "PropsId", otherKey: 'ProductId'});
+    Props.belongsToMany(models.Product, {through: models.ProductProps, foreignKey: "PropsId", otherKey: 'ProductId'});
   };
   return Props;
 };

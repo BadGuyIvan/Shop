@@ -1,5 +1,6 @@
 {
     "presets": [
+        "jest",
         "react",
         [
             "env",
@@ -18,5 +19,13 @@
                 "polyfill": false,
                 "regenerator": true
               }]
-      ]
+      ],
+      "env": {
+        "test": {
+          "plugins": [
+            "transform-class-properties",
+            "transform-object-rest-spread"
+          ]
+        }
+    }
 }

@@ -21,7 +21,10 @@ const styles = theme => ({
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: '' };
+    this.state = { 
+      address: '',
+      isAddressValid: false
+    };
   }
 
   handleChange = address => {
@@ -52,7 +55,8 @@ class LocationSearchInput extends React.Component {
 
   componentDidMount(){
     this.setState({
-      address: this.props.address
+      address: this.props.address,
+      isAddressValid: false
     })
   }
 

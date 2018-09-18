@@ -16,6 +16,7 @@ export const initialState = {
     sizePage: 8,
     products: [],
     props: [],
+    calculateProps: [],
     price: {
         min: null,
         max: null
@@ -61,10 +62,23 @@ export default function(state = initialState, action ){
             }
         break;
         case FETCH_PROPS: 
+        {
+            // let props = action.payload.products.map(item => item.Props);
+            // let propsId = action.payload.props.map(props => props.PropsId);
+            // let uniqProps = _.uniqBy(props,'id');
+            // let onlyItem = uniqProps.map(item => item.id);
+            // console.log(_.chain(uniqProps).map('id').union(propsId)).value();
+            // console.log(_.map(uniqProps,'id'));
+            // console.log(onlyItem);
+            // console.log(_.union(onlyItem,propsId));
+            // console.log(uniqProps.filter(props => propsId.some(e => e !== props.id)));
+            // const props = _.uniq(action.payload.products.props)
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
+
             }
+        }
         break;
         default:
             return state;

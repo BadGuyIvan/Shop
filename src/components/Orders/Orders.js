@@ -145,7 +145,7 @@ class Orders extends Component {
   SendOrder = (event) => {
     if(this.state.error !== true && this.state.email.length > 5 && !this.props.isAddressValid){
       const deliver_information = {
-        "contacts": this.props.address,
+        "contacts": this.props.email,
         "address_from": "Львів, Львівська область, Україна",
         "point_from": {
              "type": "Point",
@@ -154,7 +154,7 @@ class Orders extends Component {
                  24.029717000000005
              ]
          },
-         "address_to": "Нью-Йорк, США",
+         "address_to": this.props.address,
          "point_to": {
            "type": "Point",
            "coordinates": [

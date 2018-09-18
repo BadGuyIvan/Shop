@@ -14,7 +14,7 @@ const initialState = {
     address_latLng: localStorage.getItem('latlnt') ? JSON.parse(localStorage.getItem('latlnt')): [],
     address: localStorage.getItem('address') ? localStorage.getItem('address'): '',
     email: localStorage.getItem('email') ? localStorage.getItem('email') : '',
-    isAddressValid: localStorage.getItem('isAddressValid') ? localStorage.getItem('isAddressValid'): false
+    isAddressValid: localStorage.getItem('isAddressValid') ? JSON.parse(localStorage.getItem('isAddressValid')): false
 }
 
 export default function(state = initialState,action) {

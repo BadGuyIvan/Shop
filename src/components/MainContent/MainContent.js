@@ -59,7 +59,7 @@ class MainContent extends Component {
                             <Pagination onChange={this.onPageChange} 
                                         siblingPagesRange={2} 
                                         currentPage={page || 1} 
-                                        totalPages={100 || 1}/>
+                                        totalPages={pages || 1}/>
                     </Grid>
                 </Grid>
             </Grid>

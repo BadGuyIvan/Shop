@@ -53,45 +53,52 @@ router.get("/products", parseQuery, (req, res) => {
     }
 
     if(props){
-        // const propsFilter = props.map(item => {
-        //     return {
-        //         '$Props.ProductProps.PropsId$': item.PropsId,
-        //         '$Props.ProductProps.value$': item.value,
-        //     }
-        // })
-        //     _.extend(filter, {
-        //         $or: propsFilter
-        //     })
-            filterProps = ['Images',{
-                model: models.Props,
-                where: {
-                    id: props.map(item => item.PropsId)
-                },
-                through: {
-                    required: true,
-                    where: { 
-                        $and: props.map(item => {
-                            return ({
-                                value: item.value
-                            })
-                        })
-                    }
-                }
-            }]
-            console.log(filterProps);
-    }else {
-        filterProps = ['Images']
+        _.assignIn(filter, {
+            $and: [
+                ...props.map(item => 
+                    models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
+                        where: {
+                          value: item.value,
+                          ProductId: {
+                            $eq: models.sequelize.col('Product.id')
+                          }
+                        }
+                      }, models.ProductProps).replace(';', '')})`) 
+                )
+            ]
+        })
     }
     console.log('-----------------------------------------------------------------------')
     console.log(filter)
     console.log('-----------------------------------------------------------------------')
     models.Product.findAndCountAll({
         where: filter,              
-        include:filterProps,
+        include: ['Images', {
+            model: models.Props,
+                attributes: ['id'],
+                through: {
+                    attributes: []
+                }
+        }],
         limit: sizePage,
         offset : sizePage * (page - 1),  
     })
     .then(response => {
+        // models.Product.finAll({
+        //     where:filter,
+        //     attributes: [
+        //         'value',
+        //         'PropsId',
+        //         [sequelize.fn('count', sequelize.col('Props.ProductProps.ProductId')), 'productCount']
+        //     ],
+        //     include: [{
+        //         model: models.Props,
+        //     }
+        // ],
+        // group: ['id','Props.ProductProps.PropsId'],
+        // })
+        //     .then(r => console.log(r))
+        //     .catch(err => console.log(err))
         res.send({
             pages: Math.ceil(response.count / sizePage),
             products: response.rows

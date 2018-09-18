@@ -1,4 +1,4 @@
-// import path from "path";
+const path = require("path");
 const webpack = require('webpack');
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
@@ -8,7 +8,8 @@ const bodyParser = require('body-parser');
 const config = require("./webpack.devlopment.config");
 const _ = require('lodash');
 const models = require('./models');
-const sequelize = require('sequelize');
+const sequelize = require('sequelize')
+// const sequelize = require('sequelize');
 //Import Router
 const initialFilter = require('./api/initialFilter');
 const Filter = require("./api/filter");
@@ -26,7 +27,7 @@ app.use(Filter);
 app.use(initialFilter);
 app.use(Order)
 
-
+// const sequelize = new Sequelize
 if (isDevelopment) {
 	app.use(webpackDevMiddleware(compiler, {
 		historyApiFallback: true,
@@ -37,25 +38,47 @@ if (isDevelopment) {
     // models.sequelize.sync();
 
     app.get('/p', (req,res) => {
+        // models.sequelize.query(`SELECT * FROM "Products" AS "Product"
+        // WHERE (EXISTS (SELECT * FROM "ProductProps"
+        // WHERE value = '8.1' AND "ProductId" = "Product"."id"))
+        // AND EXISTS (SELECT 1 FROM "ProductProps" 
+        // WHERE value = '16MP + 5MP dual camera' AND "ProductId" = "Product"."id")`).then(myTableRows => {
+        //     res.send(myTableRows)
+        //   })
+        
         models.Product.findAll({
             where: {
-                $and: [
-                    {
-                        '$Props.ProductProps.PropsId$': 6,
-                        '$Props.ProductProps.value$': '8.1'
-                    },
-                    {
-                        '$Props.ProductProps.PropsId$': 5,
-                        '$Props.ProductProps.value$': '16MP + 5MP dual camera'
+              $and: [
+                models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
+                  where: {
+                    value: '8.1',
+                    ProductId: {
+                      $eq: models.sequelize.col('Product.id')
                     }
-                ],
+                  }
+                }, models.ProductProps).replace(';', '')})`),
+                // models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
+                //   where: {
+                //     value: '16MP + 5MP dual camera',
+                //     ProductId: {
+                //       $eq: models.sequelize.col('Product.id')
+                //     }  
+                //   }
+                // }, models.ProductProps).replace(';', '')})`)
+              ]
             },
+            attributes: ['name'],
             include: [{
                 model: models.Props,
-               
+                attributes: ['id'],
+                through: {
+                    attributes: []
+                }
             }]
-        })
-            .then(r => res.send(r))
+          })
+            .then(r => res.send(
+                r
+            ))
             .catch(err => res.send({Error: err}))
     })
 
@@ -68,7 +91,7 @@ app.get('/gg', (req,res) => {
 
     app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
-    app.use(express.static(__dirname+'/public'));
+    app.use(express.static(path.join(__dirname,'/public')));
     
 	app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 }
