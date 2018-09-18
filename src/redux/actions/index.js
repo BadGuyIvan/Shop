@@ -220,6 +220,8 @@ export const deleteOrder = () => {
         type: DELETE_ORDER,
         payload: {
             product: [],
+            address: '',
+            email: '',
             total: 0
         }
     }
@@ -242,13 +244,15 @@ export const fetchProps = (props) => {
             }
         })
             .then(res => {
+                console.log(res);
                 dispatch({
                     type: FETCH_PROPS,
                     payload: {
                         props,
                         page: 1,
                         pages: res.data.pages,
-                        products: res.data.products
+                        products: res.data.products,
+                        calculateProps: res.data.calculateProps
                     }
                 })
             })

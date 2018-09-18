@@ -73,29 +73,38 @@ router.get("/products", parseQuery, (req, res) => {
     console.log('-----------------------------------------------------------------------')
     models.Product.findAndCountAll({
         where: filter,              
-        include: ['Images'],
+        distinct:true,
+        include: ['Images',{
+            model: models.Props,
+            attributes: ['name'],
+            through: {
+                attributes: ['value']
+            }
+        }],
         limit: sizePage,
         offset : sizePage * (page - 1),  
     })
     .then(response => {
-        // models.Product.finAll({
-        //     where:filter,
-        //     attributes: [
-        //         'value',
-        //         'PropsId',
-        //         [sequelize.fn('count', sequelize.col('Props.ProductProps.ProductId')), 'productCount']
-        //     ],
-        //     include: [{
-        //         model: models.Props,
-        //     }
-        // ],
-        // group: ['id','Props.ProductProps.PropsId'],
-        // })
-        //     .then(r => console.log(r))
-        //     .catch(err => console.log(err))
+        let dataValues = []
+        if(props){
+            console.log(props.map(props => ({value: props.value})));
+            dataValues = 
+                        _.chain(response.rows)
+                        .map('dataValues')
+                        .map('Props')
+                        .flatten()
+                        .groupBy('name')
+                        .toArray()
+                        .flatten()
+                        .unionWith(_.isEqual)
+                        .map('ProductProps')
+                        .differenceBy(props.map(props => ({value: props.value})),'value')
+                        .value()
+        }
         res.send({
             pages: Math.ceil(response.count / sizePage),
-            products: response.rows
+            products: response.rows,
+            calculateProps: dataValues
         });
     })
     .catch(err => res.send({Error: err}))

@@ -23,6 +23,7 @@ const styles = {
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
+    backgroundSize: 'contain'
   },
   typography: {
     overflow: 'hidden',
@@ -38,7 +39,7 @@ const styles = {
     textTransform: 'uppercase'
   },
   discountPrice: {
-    fontSize: '1.5vw',
+    fontSize: '1.5rem',
     fontWeight: 'bold',
     color: '#23a023',
     marginLeft: '1rem'

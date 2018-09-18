@@ -30,7 +30,8 @@ const styles = theme => ({
     textAlign: 'center',
     backgroundColor: "#8888",
     padding: 10,
-    borderRadius: 4
+    borderRadius: 4,
+    // textAlign: 'center'
   },
   invisible: {
     display: 'none'
@@ -96,7 +97,7 @@ class FilterProps extends React.Component {
   }
 
   render() {
-    const { classes, props, categories } = this.props;
+    const { classes, props, categories, calculateProps, products } = this.props;
     return (
     <Fragment>
         <MuiThemeProvider theme={My_theme}>
@@ -115,7 +116,8 @@ class FilterProps extends React.Component {
                         </Typography>
                     </ExpansionPanelSummary><ExpansionPanelDetails>
                         <List>
-                        {props.value.map((name, index) => (
+                        {
+                          props.value.map((name, index) => (
                             <ListItem
                                 key={index}
                                 role={undefined}
@@ -137,7 +139,18 @@ class FilterProps extends React.Component {
                                 <Grid item xs={4} sm={4} md={4} lg={4}>
                                     {
                                         !this.state.checked.some(item => item.value === name.value) &&
-                                        <ListItemText classes={{primary: classes.countProduct}} primary={name.productCount} />
+                                        <ListItemText primary={
+                                          <Grid container justify="center">
+                                            <Grid item className={classes.countProduct}>
+                                            {
+                                              calculateProps.some(item => item === name.value)
+                                              ? `+${
+                                                name.productCount <= 1 ? name.productCount : products.length
+                                              } ` : name.productCount
+                                            }
+                                            </Grid>
+                                          </Grid>
+                                        } />
                                     }
                                 </Grid>
                             </Grid>
@@ -165,7 +178,9 @@ FilterProps.propTypes = {
 const mapStateToProps = state => {
     return {
         props: state.initialFilters.props,
-        categories: state.filter.categories
+        categories: state.filter.categories,
+        products: state.filter.products,
+        calculateProps: state.filter.calculateProps.map(item => item.value)
     }
 }
 

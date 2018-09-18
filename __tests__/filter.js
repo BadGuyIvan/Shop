@@ -11,7 +11,7 @@ describe('GET /products', () => {
   beforeEach(() => moxios.install());
   afterEach(() => moxios.uninstall());
 
-  test('Should dispatch GET_ALL_PRODUCT action and a product', async (done) => {
+  test('Should dispatch GET_ALL_PRODUCT action and a product', (done) => {
     moxios.stubRequest('/products', {
       status: 201,
       response: FetchProducts
@@ -23,9 +23,16 @@ describe('GET /products', () => {
     }];
 
     const store = mockStore({}, null ,done)
-    await store.dispatch(getAllProduct());
+    // await store.dispatch(getAllProduct());
 
-    expect(store.getActions()).toEqual(returnedAction)
-    done();
+    // expect(store.getActions()).toEqual(returnedAction)
+    // done();
+
+    store.dispatch(getAllProduct())
+    .then(() => {
+      const data = store.getActions();
+      expect(data.products.length).toBe(8)
+      done();
+    })
   });
 });

@@ -27,6 +27,12 @@ app.use(Filter);
 app.use(initialFilter);
 app.use(Order)
 
+// customizer = (objValue, srcValue) => {
+//     if (_.isObject(objValue)) {
+//       return objValue.concat(srcValue);
+//     }
+//   }
+
 // const sequelize = new Sequelize
 if (isDevelopment) {
 	app.use(webpackDevMiddleware(compiler, {
@@ -37,6 +43,50 @@ if (isDevelopment) {
 	app.use(webpackHotMiddleware(compiler));
     // models.sequelize.sync();
 
+    app.get('/pp', (req,res) => {
+        models.Product.findAndCountAll({
+            where: {
+                $and: [ 
+                        models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
+                            where: {
+                              value: '8.1',
+                              ProductId: {
+                                $eq: models.sequelize.col('Product.id')
+                              }
+                            }
+                          }, models.ProductProps).replace(';', '')})`) 
+                ],
+            },
+            distinct:true,
+            include: [{
+                model: models.Props,
+                attributes: ['name'],
+                through: {
+                    attributes: ['value']
+                }
+            }]
+        })
+        .then(r => 
+            {
+                let dataValues = 
+                    _.chain(r.rows)
+                    .map('dataValues')
+                    .map('Props')
+                    .flatten()
+                    .groupBy('name')
+                    .toArray()
+                    .flatten()
+                    .unionWith(_.isEqual)
+                    .mergeWith(!_.isEqual)
+                    // .map('ProductProps')
+                    .differenceBy([{'value':'8.1'}],'value')
+                    .value()
+                console.log(dataValues)
+                res.send(dataValues)
+        })
+        .catch(err => res.send({Error: err}))
+    })
+
     app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 
 } else {
@@ -45,7 +95,7 @@ if (isDevelopment) {
     
 	app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 }
-const port = process.env.PORT || 58355;
+export const port = process.env.PORT || 58355;
 
 // models.sequelize.sync()
 //     .then(() => console.log('Nice! Database looks fine'))

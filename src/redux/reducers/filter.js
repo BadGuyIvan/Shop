@@ -75,10 +75,10 @@ export default function(state = initialState, action ){
             // console.log(_.union(onlyItem,propsId));
             // console.log(uniqProps.filter(props => propsId.some(e => e !== props.id)));
             // const props = _.uniq(action.payload.products.props)
+            console.log(action.payload)
             return {
                 ...state,
                 ...action.payload,
-
             }
         }
         break;

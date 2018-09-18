@@ -126,7 +126,15 @@ class Categories extends React.Component {
                     <Grid item xs={4} sm={4} md={4} lg={4}>
                     {
                       !this.state.checked.some(item => item.name === value.name) &&
-                      <ListItemText classes={{primary: classes.countProduct}} primary={value.productCount} />
+                      <ListItemText primary={
+                        <Grid container justify="center">
+                          <Grid item className={classes.countProduct}>
+                            {
+                              value.productCount    
+                            }
+                          </Grid>
+                        </Grid>
+                        } />
                     }
                     </Grid>
                   </Grid>
