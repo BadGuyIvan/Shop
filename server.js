@@ -93,7 +93,7 @@ app.get('/gg', (req,res) => {
 } else {
     app.use(express.static(path.join(__dirname,'/public')));
     
-	app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
+	app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 }
 const port = process.env.PORT || 58355;
 
