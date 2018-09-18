@@ -73,13 +73,7 @@ router.get("/products", parseQuery, (req, res) => {
     console.log('-----------------------------------------------------------------------')
     models.Product.findAndCountAll({
         where: filter,              
-        include: ['Images', {
-            model: models.Props,
-                attributes: ['id'],
-                through: {
-                    attributes: []
-                }
-        }],
+        include: ['Images'],
         limit: sizePage,
         offset : sizePage * (page - 1),  
     })

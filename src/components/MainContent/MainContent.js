@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -37,15 +37,21 @@ class MainContent extends Component {
     }
 
   render() {
-    const { classes, pages, page } = this.props;
+    const { classes, pages, page, product } = this.props;
+    const loading = product ? !!product.length : false
     return (
         <div className={classes.root}>
             <Grid container>
                 <Grid item className={classes.paper} xs={12} sm={3} md={2}>
                     <h1 className={classes.filter}>Filters</h1>
-                    <Categories/>
-                    <FilterPrice/>
-                    <FilterProps/>
+                    {
+                    loading &&
+                        <Fragment>
+                            <Categories/>
+                            <FilterPrice/>
+                            <FilterProps/>
+                        </Fragment>
+                    }
                 </Grid>
                 <Grid item xs={12} sm={9} md={10}>
                     <Grid container>
@@ -54,13 +60,15 @@ class MainContent extends Component {
                         </Grid>
                         <Product/>
                     </Grid>
+                    {
+                    loading &&
                     <Grid container justify="flex-end" alignContent="center" alignItems="center">
                             <SizePage/>
                             <Pagination onChange={this.onPageChange} 
                                         siblingPagesRange={2} 
                                         currentPage={page || 1} 
                                         totalPages={pages || 1}/>
-                    </Grid>
+                    </Grid>}
                 </Grid>
             </Grid>
         </div>
@@ -76,6 +84,7 @@ const mapStateToProps = state => {
     return {
         pages: state.filter.pages,
         page: state.filter.page,
+        product: state.filter.products
     }
 }
 

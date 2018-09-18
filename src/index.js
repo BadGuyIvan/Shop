@@ -8,7 +8,7 @@ import store from "./redux/store";
 
 import { initialFilters, getAllProduct } from './redux/actions'
 
-store.dispatch(initialFilters());
+// store.dispatch(initialFilters());
 // store.dispatch(getAllProduct());
 ReactDOM.render(
     <Provider store={store}>

@@ -38,13 +38,13 @@ const styles = {
     textTransform: 'uppercase'
   },
   discountPrice: {
-    fontSize: '2.5vw',
+    fontSize: '1.5vw',
     fontWeight: 'bold',
     color: '#23a023',
     marginLeft: '1rem'
   },
   discountTrue: {
-    lineHeight: '2vw',
+    // lineHeight: '2vw',
     textDecoration: 'line-through'
   }
 };
@@ -80,7 +80,7 @@ class CardProduct extends Component{
                 {
                   data.discount_price !== 0 &&
                     <Grid item className={classes.discountPrice}>
-                      {data.discount_price}
+                      ${data.discount_price}
                     </Grid>
                 }
               </Grid>

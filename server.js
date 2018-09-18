@@ -37,60 +37,10 @@ if (isDevelopment) {
 	app.use(webpackHotMiddleware(compiler));
     // models.sequelize.sync();
 
-    app.get('/p', (req,res) => {
-        // models.sequelize.query(`SELECT * FROM "Products" AS "Product"
-        // WHERE (EXISTS (SELECT * FROM "ProductProps"
-        // WHERE value = '8.1' AND "ProductId" = "Product"."id"))
-        // AND EXISTS (SELECT 1 FROM "ProductProps" 
-        // WHERE value = '16MP + 5MP dual camera' AND "ProductId" = "Product"."id")`).then(myTableRows => {
-        //     res.send(myTableRows)
-        //   })
-        
-        models.Product.findAll({
-            where: {
-              $and: [
-                models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
-                  where: {
-                    value: '8.1',
-                    ProductId: {
-                      $eq: models.sequelize.col('Product.id')
-                    }
-                  }
-                }, models.ProductProps).replace(';', '')})`),
-                // models.sequelize.literal(`EXISTS (${models.sequelize.dialect.QueryGenerator.selectQuery('ProductProps', {
-                //   where: {
-                //     value: '16MP + 5MP dual camera',
-                //     ProductId: {
-                //       $eq: models.sequelize.col('Product.id')
-                //     }  
-                //   }
-                // }, models.ProductProps).replace(';', '')})`)
-              ]
-            },
-            attributes: ['name'],
-            include: [{
-                model: models.Props,
-                attributes: ['id'],
-                through: {
-                    attributes: []
-                }
-            }]
-          })
-            .then(r => res.send(
-                r
-            ))
-            .catch(err => res.send({Error: err}))
-    })
+    app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 
-app.get('/gg', (req,res) => {
-    models.Product.findAll({
-        include: ["Props"]
-    })
-        .then(r => res.send(r))
-})
-
-    app.get('/*', (req, res) => res.sendfile(__dirname+'/public/index.html'));
 } else {
+
     app.use(express.static(path.join(__dirname,'/public')));
     
 	app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));

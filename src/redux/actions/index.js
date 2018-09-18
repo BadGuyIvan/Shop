@@ -15,7 +15,8 @@ import {
     ADD_QT,
     DISCARD_QT,
     DELETE_ORDER,
-    ADDRESS_LATLNG
+    ADDRESS_LATLNG,
+    ERROR
 } from './constants';
 
 import store from "../store";
@@ -36,6 +37,12 @@ export const getAllProduct = () => {
                     }
                 })
             })
+            .catch(err => dispatch({
+                type: ERROR,
+                payload: {
+                    Error: err
+                }
+            }))
     }
 }
 

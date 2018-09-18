@@ -14,3 +14,4 @@ export const DISCARD_QT = 'DISCARD_QT';
 export const DELETE_ORDER = 'DELETE_ORDER';
 export const CALCULATE_COUNT_PROPS = "CALCULATE_COUNT_PROPS";
 export const ADDRESS_LATLNG = "ADDRESS_LATLNG";
+export const ERROR = "ERROR";

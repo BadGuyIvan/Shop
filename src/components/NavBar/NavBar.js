@@ -20,8 +20,8 @@ const styles = theme => ({
     },
     paper: {
         ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit,
-        paddingBottom: theme.spacing.unit
+        paddingTop: '5px',
+        paddingBottom: '5px'
     },
     wrapper: {
         marginTop: 'auto',

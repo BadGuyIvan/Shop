@@ -6,6 +6,7 @@ import {
     GET_PRODUCTS_BY_PRICE,
     CHANGED_SIZE_PAGE,
     FETCH_PROPS,
+    ERROR
 } from "../actions/constants";
 
 export const initialState = {
@@ -20,7 +21,8 @@ export const initialState = {
     price: {
         min: null,
         max: null
-    }
+    },
+    error: {}
 }
 
 export default function(state = initialState, action ){
@@ -80,6 +82,12 @@ export default function(state = initialState, action ){
             }
         }
         break;
+        case ERROR : {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
         default:
             return state;
     }
