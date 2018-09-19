@@ -20,9 +20,9 @@ module.exports = {
     // },
     entry: path.resolve('src/index.js'),
     output: {
-        publicPath: '/',
+        publicPath: '/public/',
         filename: 'bundle.js',
-        path: path.resolve(__dirname, "public"),
+        path: path.join(__dirname, "public"),
         // hotUpdateChunkFilename: 'hot/hot-update.js',
         // hotUpdateMainFilename: 'hot/hot-update.json'
     },
