@@ -47,7 +47,7 @@ if (isDevelopment) {
 
 } else {
 
-    app.use(express.static(path.join(__dirname,'/public')));
+    app.use(express.static(path.join(__dirname,'public')));
     
 	app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 }
