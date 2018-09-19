@@ -42,7 +42,7 @@ if (isDevelopment) {
 
 	app.use(webpackHotMiddleware(compiler));
     // models.sequelize.sync();
-
+    app.use(express.static(path.join(__dirname,'public')));
     app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 
 } else {
