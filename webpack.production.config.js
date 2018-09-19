@@ -13,7 +13,7 @@ module.exports = {
     mode: 'production',
     entry: path.resolve('src/index.js'),
     output: {
-		publicPath: '/public/',
+		publicPath: '/',
         filename: 'bundle.js',
         path: path.join(__dirname, "public"),
     },
