@@ -11,11 +11,11 @@ const devMode = true;
 
 module.exports = {
     mode: 'production',
-    entry: path.resolve('src/index.js'),
+    entry: ['./src/index'],
     output: {
-		publicPath: '/',
-        filename: 'bundle.js',
         path: path.join(__dirname, "public"),
+        filename: 'bundle.js',
+		publicPath: '/public/',
     },
     module: {
         rules: [
@@ -59,7 +59,12 @@ module.exports = {
 			filename: devMode ? '[name].css' : '[name].[hash].css',
 			chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
 		}),
-        htmlPlugin,
-        new webpack.HotModuleReplacementPlugin()
+		htmlPlugin,
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production'),
+				'API_HOST': 'https://store-shop.herokuapp.com'
+			}
+		})
     ]
 }

@@ -23,14 +23,14 @@ router.get("/products", parseQuery, (req, res) => {
     console.log(props)
     console.log('###########################################################')
 
-    if(price){
+    // if(price){
         if(price.min){
             _.merge(filter, {price: {$gte: price.min}})
         }
         if(price.max){
             _.merge(filter, {price: {$lte: price.max}})
         }
-    }
+    // }
 
     if(categories){
         _.assignIn(filter, { CategoryId: { $in: categories }})
@@ -85,10 +85,9 @@ router.get("/products", parseQuery, (req, res) => {
         offset : sizePage * (page - 1),  
     })
     .then(response => {
-        let dataValues = []
+        let props_value = []
         if(props){
-            console.log(props.map(props => ({value: props.value})));
-            dataValues = 
+            props_value = 
                         _.chain(response.rows)
                         .map('dataValues')
                         .map('Props')
@@ -104,7 +103,7 @@ router.get("/products", parseQuery, (req, res) => {
         res.send({
             pages: Math.ceil(response.count / sizePage),
             products: response.rows,
-            calculateProps: dataValues
+            calculateProps: props_value
         });
     })
     .catch(err => res.send({Error: err}))

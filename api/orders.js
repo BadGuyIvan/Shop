@@ -13,7 +13,7 @@ router.post("/orders", (req, res) => {
         trackCode
     })
         .then(order => {
-            Promise.all(
+            return Promise.all(
                 products.map(product => {
                     return order.addProduct(product.id, { through : { quantity: product.qt}})
                 })
