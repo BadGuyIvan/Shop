@@ -59,7 +59,6 @@ module.exports = {
 			filename: devMode ? '[name].css' : '[name].[hash].css',
 			chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
 		}),
-		htmlPlugin,
 		new webpack.DefinePlugin({
 			'process.env': {
 				'NODE_ENV': JSON.stringify('production'),
