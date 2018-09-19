@@ -95,7 +95,7 @@ if (isDevelopment) {
     
 	app.get('/*', (req, res) => res.sendfile(path.join(__dirname,'/public/index.html')));
 }
-export const port = process.env.PORT || 58355;
+const port = process.env.PORT || 58355;
 
 // models.sequelize.sync()
 //     .then(() => console.log('Nice! Database looks fine'))
